@@ -42,6 +42,7 @@ Current public stage:
 - the SoulBond core loop already exists and is runnable
 - the project is stronger on core logic than on visible integration
 - the long-term companion layer is defined more clearly than it is currently surfaced
+- the public GitHub repo and the `lumaclaw` npm package name are now occupied, but the release workflow is intentionally split into separate development, public, and npm packaging tracks
 
 ### Already real
 
@@ -132,6 +133,7 @@ Current transition policy:
 - the package exposes `lumaclaw` as the public CLI name
 - legacy `soulclaw` and `openclaw` entrypoints may remain temporarily for compatibility during transition
 - existing inherited docs/examples may still use `openclaw` while the fork boundary is being cleaned up
+- day-to-day engineering still happens in the heavier fork-stage development repo, while the public GitHub repo is synchronized as a cleaner public snapshot and npm is currently held by a minimal placeholder package
 
 ## Install (recommended)
 
@@ -154,6 +156,7 @@ Current transition note:
 - package metadata uses `lumaclaw`
 - local CLI entrypoints support `lumaclaw` first, with legacy `soulclaw` / `openclaw` compatibility during transition
 - inherited docs/examples may still mention `openclaw` until the fork boundary is cleaned up further
+- the current public npm package is a minimal placeholder release used to reserve the package name cleanly while the full runtime package boundary is being prepared
 
 ## Quick start (TL;DR)
 

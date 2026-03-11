@@ -39,12 +39,14 @@ The project is no longer at "idea stage," but it is not yet at "finished product
 
 ### Default execution workflow
 
-For the current phase, SoulClaw development follows this model:
+For the current phase, LumaClaw development follows this model:
 
 - Yukino leads scope, architecture, and acceptance criteria
 - Codex handles bounded implementation work
 - Yukino reviews the result before it is treated as project truth
 - final user-facing delivery should include both implementation result and Yukino's acceptance judgment / next-step recommendation
+- real engineering continues in the heavier fork-stage development repo, while public GitHub updates are synchronized as cleaner public snapshots instead of forcing every upstream-heavy history change directly into the public repository
+- npm remains intentionally split: the public `lumaclaw` package name is currently held by a minimal placeholder package until the full runtime package can be published cleanly
 
 ---
 
@@ -70,6 +72,11 @@ The fork direction is already visible, but the user-facing surface is still mixe
 **In progress, not done.**
 
 The repo is clearly no longer a blank fork, but it is also not yet clean enough to stop explaining the transition.
+
+Public infrastructure is now partially secured:
+- GitHub public repo is live
+- npm package name `lumaclaw` is occupied
+- the remaining work is to steadily replace temporary public scaffolding with cleaner long-term release structure
 
 ---
 
