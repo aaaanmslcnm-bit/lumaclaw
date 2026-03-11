@@ -1,0 +1,23 @@
+# LumaClaw Render deployment template
+# Fork-stage note: inherited `OPENCLAW_*` env vars remain for runtime compatibility.
+services:
+  - type: web
+    name: lumaclaw
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: SETUP_PASSWORD
+        sync: false
+      - key: OPENCLAW_STATE_DIR
+        value: /data/.lumaclaw
+      - key: OPENCLAW_WORKSPACE_DIR
+        value: /data/lumaclaw-workspace
+      - key: OPENCLAW_GATEWAY_TOKEN
+        generateValue: true
+    disk:
+      name: lumaclaw-data
+      mountPath: /data
+      sizeGB: 1

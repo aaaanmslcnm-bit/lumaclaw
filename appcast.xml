@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- LumaClaw Sparkle appcast placeholder.
+     Fork-stage note: LumaClaw has not yet published its own release/update pipeline.
+     This file is intentionally minimal so the repo does not keep advertising inherited
+     upstream OpenClaw release history as if it were a LumaClaw-native feed. -->
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>LumaClaw</title>
+    <description>LumaClaw macOS appcast placeholder (fork-stage, no public release feed yet).</description>
+    <language>en</language>
+  </channel>
+</rss>
