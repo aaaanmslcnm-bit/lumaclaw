@@ -10,7 +10,7 @@ LumaClaw keeps the real agent capabilities of OpenClaw — tools, automation, br
 
 > Not just an AI tool. Not just a cute shell.
 
-Project direction: [`VISION.md`](VISION.md) · Roadmap: [`ROADMAP.md`](ROADMAP.md) · Current state: [`CURRENT_STATE.md`](CURRENT_STATE.md) · Contribution guide: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+Project direction: [`VISION.md`](VISION.md) · Roadmap: [`ROADMAP.md`](ROADMAP.md) · Current state: [`CURRENT_STATE.md`](CURRENT_STATE.md) · Contribution guide: [`CONTRIBUTING.md`](CONTRIBUTING.md) · Collaboration workflow: [`docs/collaboration-workflow.md`](docs/collaboration-workflow.md)
 
 ## Why LumaClaw?
 

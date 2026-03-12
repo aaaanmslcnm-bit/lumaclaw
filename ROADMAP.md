@@ -9,7 +9,7 @@ The development order remains deliberate:
 3. map it into visible behavior
 4. only then expand voice / avatar / desktop presence
 
-If that order gets reversed, SoulClaw turns into costume design with no spine.
+If that order gets reversed, LumaClaw turns into costume design with no spine.
 
 ---
 
@@ -26,7 +26,7 @@ What is already true:
 - daily evaluation is real
 - state persistence and status inspection are real
 - cron integration exists
-- the repo already has a SoulClaw-facing direction and naming layer
+- the repo already has a LumaClaw-facing direction and naming layer
 
 What is not yet true:
 
@@ -39,7 +39,7 @@ The project is no longer at "idea stage," but it is not yet at "finished product
 
 ### Default execution workflow
 
-For the current phase, LumaClaw development follows this model:
+For the current phase, LumaClaw development follows this model (see also [`docs/collaboration-workflow.md`](docs/collaboration-workflow.md)):
 
 - Yukino leads scope, architecture, and acceptance criteria
 - Codex handles bounded implementation work
@@ -53,7 +53,7 @@ For the current phase, LumaClaw development follows this model:
 ## Phase 0 — Fork legibility and transition cleanup
 
 ### Goal
-Make SoulClaw understandable as **its own project** without pretending it no longer depends on OpenClaw.
+Make LumaClaw understandable as **its own project** without pretending it no longer depends on OpenClaw.
 
 ### Why this phase still matters
 The fork direction is already visible, but the user-facing surface is still mixed:
@@ -66,7 +66,7 @@ The fork direction is already visible, but the user-facing surface is still mixe
 - finish repo-facing naming cleanup where it is user-visible
 - keep attribution honest and upstream links explicit
 - remove obvious presentation damage (README glitches, stale wording, unclear transition language)
-- define a cleaner split between inherited runtime surface and SoulClaw-specific product layer
+- define a cleaner split between inherited runtime surface and LumaClaw-specific product layer
 
 ### Status
 **In progress, not done.**
@@ -86,7 +86,7 @@ Public infrastructure is now partially secured:
 Turn SoulBond from a believable MVP into a stable subsystem that can survive long-term evolution.
 
 ### Why this phase is first
-The current SoulBond loop is the strongest differentiator SoulClaw has. It already proves the project is more than a rename. That also means it is the first place where hidden technical debt will hurt.
+The current SoulBond loop is the strongest differentiator LumaClaw has. It already proves the project is more than a rename. That also means it is the first place where hidden technical debt will hurt.
 
 ### Priority work
 - add state validation / migration for versioned SoulBond state
@@ -111,7 +111,7 @@ Still weak:
 ### Status
 **Active and important.**
 
-This is the most urgent engineering layer because it protects the part of SoulClaw that is already real.
+This is the most urgent engineering layer because it protects the part of LumaClaw that is already real.
 
 ---
 
@@ -121,7 +121,7 @@ This is the most urgent engineering layer because it protects the part of SoulCl
 Make SoulBond affect the assistant in ways users can actually feel.
 
 ### Why this phase matters
-Right now SoulClaw's strongest differentiator is mostly structural:
+Right now LumaClaw's strongest differentiator is mostly structural:
 
 - transcript
 - score
@@ -145,7 +145,7 @@ That is valuable, but it is still too invisible. If SoulBond does not start chan
 ### Status
 **Next major differentiator.**
 
-This is where SoulClaw starts becoming more than a strong fork with a nice internal model.
+This is where LumaClaw starts becoming more than a strong fork with a nice internal model.
 
 ---
 
@@ -168,7 +168,7 @@ That criticism is fair.
 ### Status
 **Needed soon.**
 
-Until this phase advances, SoulClaw will keep feeling stronger in architecture than in visible user experience.
+Until this phase advances, LumaClaw will keep feeling stronger in architecture than in visible user experience.
 
 ---
 
@@ -195,7 +195,7 @@ The settings/interface shape may exist before the full behavior exists. That is 
 ## Phase 5 — Desktop presence
 
 ### Goal
-Make SoulClaw feel present on the desktop rather than only accessible through commands and chats.
+Make LumaClaw feel present on the desktop rather than only accessible through commands and chats.
 
 ### Examples
 - floating assistant window
@@ -216,7 +216,7 @@ This is part of the long-term identity, not the next emergency.
 
 ## What is intentionally not first
 
-SoulClaw should **not** prioritize these before the middle layers are real:
+LumaClaw should **not** prioritize these before the middle layers are real:
 
 - heavy visual polish without behavior integration
 - overdramatic "relationship" framing without explainable logic
@@ -246,10 +246,10 @@ Because versioned state already exists, and long-term continuity will become fra
 Because `affectTone`, `affectAvatar`, `affectVoice`, `notifyDaily`, and related settings should not remain mostly aspirational interface surface.
 
 ### 3. Finish the public/runtime transition cleanup
-Because SoulClaw will keep underselling itself if the docs, names, and visible product entry points still feel half-transitioned.
+Because LumaClaw will keep underselling itself if the docs, names, and visible product entry points still feel half-transitioned.
 
 ---
 
 ## One-sentence roadmap summary
 
-SoulClaw is moving from **real but mostly internal MVP** toward **relationship-aware behavior and product-level companion presence** — in that order, because any flashier order would be stupid.
+LumaClaw is moving from **real but mostly internal MVP** toward **relationship-aware behavior and product-level companion presence** — in that order, because any flashier order would be stupid.
