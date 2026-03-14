@@ -7,13 +7,13 @@ This file is the reality layer for the project.
 It is not the long-term vision, and it is not marketing copy.
 It exists to answer a simpler question:
 
-> **What is actually real in SoulClaw right now, what is still incomplete, and what should be done next?**
+> **What is actually real in LumaClaw right now, what is still incomplete, and what should be done next?**
 
 ---
 
 ## Short version
 
-SoulClaw is currently best described as:
+LumaClaw is currently best described as:
 
 > **a real OpenClaw fork with a working SoulBond MVP, strong engineering foundations, and a product layer that has not fully caught up to the architecture yet.**
 
@@ -28,17 +28,18 @@ In plainer language:
 
 ## Default development workflow
 
-SoulClaw currently uses this working model by default:
+LumaClaw currently uses this working model by default:
 
-1. **Yukino leads** — define scope, priorities, architecture, and acceptance criteria
-2. **Codex implements** — handle bounded coding/execution work inside the defined task
-3. **Yukino reviews** — inspect diffs, rerun key tests, judge quality/risk, and decide whether the result is acceptable
-4. **Only then deliver to Jie** — raw external-agent output is not treated as the final project judgment
+1. **Yukino leads** — define scope, priorities, architecture, acceptance criteria, and final project truth
+2. **Akane supports as deputy** — handle bounded scouting, risk scanning, controlled coordination, and external experience-layer organization under Yukino's direction
+3. **Codex implements** — handle bounded coding/execution work inside the defined task
+4. **Yukino reviews** — inspect diffs, rerun key tests, judge quality/risk, and decide whether the result is acceptable
+5. **Only then deliver to Jie** — raw external-agent output is not treated as the final project judgment
 
 This is intentional.
-SoulClaw should not drift into a mode where the coding worker silently becomes the project lead.
+LumaClaw should not drift into a mode where the coding worker silently becomes the project lead.
 
-For medium-sized delegated work, SoulClaw also uses a lightweight task spec instead of ad-hoc prompts:
+For medium-sized delegated work, LumaClaw also uses a lightweight task spec instead of ad-hoc prompts:
 - template: [`docs/light-spec-template.md`](docs/light-spec-template.md)
 - purpose: freeze goal, scope, non-goals, acceptance, and review focus before Codex starts implementation
 
@@ -54,7 +55,8 @@ The automatic callback only means:
 - Yukino has received the result
 - a formal review still needs to happen
 
-The final project-facing delivery should come from Yukino and follow this structure by default:
+The final project-facing delivery should come from Yukino and follow this structure by default.
+Formal status judgments should also be written into [`docs/acceptance-log.md`](docs/acceptance-log.md) so project truth does not live only in chat:
 
 1. **Task title**
    - what the task was
@@ -121,7 +123,7 @@ These directions are visible, but not yet fully real in the user-facing product:
 SoulBond exists structurally, but it does not yet consistently change the assistant in ways users can feel across the product.
 
 Examples of what is still incomplete:
-- tone mapping that is consistently applied
+- tone mapping is now visible in at least one real reply boundary, but not yet consistently applied across the product
 - stage-aware behavior changes that are visible in normal use
 - runtime behavior that fully consumes SoulBond settings
 
@@ -134,7 +136,7 @@ These are still future-facing rather than current headline features:
 
 ## UI / illustration timing
 
-SoulClaw should not jump straight into full visual presentation while the behavior layer is still mostly invisible.
+LumaClaw should not jump straight into full visual presentation while the behavior layer is still mostly invisible.
 
 ### Functional UI can start when
 These conditions are met:
@@ -154,7 +156,7 @@ These conditions are met:
 - at least one or two runtime behavior changes are genuinely visible to users
 - the core demo no longer needs heavy narration to explain itself
 
-Only then should SoulClaw seriously invest in:
+Only then should LumaClaw seriously invest in:
 - standing illustration / avatar work
 - expression mapping
 - stronger visual identity
@@ -166,14 +168,14 @@ Only then should SoulClaw seriously invest in:
 - **Only after that:** amplify it with illustration, voice, and presence
 
 ### Fork transition cleanup
-The project identity is SoulClaw, but the public/runtime surface still carries inherited OpenClaw pieces in several places.
+The project identity is LumaClaw, but the public/runtime surface still carries inherited OpenClaw pieces in several places.
 That is survivable for now, but it still weakens clarity.
 
 ---
 
 ## Current strongest parts
 
-If someone asked what SoulClaw is doing well right now, the honest answer would be:
+If someone asked what LumaClaw is doing well right now, the honest answer would be:
 
 ### 1. It has a real differentiator
 SoulBond is not imaginary anymore. There is a real:
@@ -183,7 +185,7 @@ SoulBond is not imaginary anymore. There is a real:
 loop in the codebase.
 
 ### 2. The project direction is unusually disciplined
-SoulClaw is not trying to become:
+LumaClaw is not trying to become:
 - a hollow mascot
 - a cheap romance-script gimmick
 - a shell with no practical capability
@@ -191,7 +193,7 @@ SoulClaw is not trying to become:
 That restraint is part of the project's strength.
 
 ### 3. The engineering base is serious
-The project is inheriting from a large real runtime, not pretending to start from zero. That gives SoulClaw real leverage if the companion layer is integrated carefully.
+The project is inheriting from a large real runtime, not pretending to start from zero. That gives LumaClaw real leverage if the companion layer is integrated carefully.
 
 ---
 
@@ -221,7 +223,7 @@ This is why the project can feel:
 - stronger in internal logic than in visible differentiation
 
 ### 4. Fork transition is still visibly incomplete
-The current mixed SoulClaw / OpenClaw surface is understandable during transition, but it should not remain vague forever.
+The current mixed LumaClaw / OpenClaw surface is understandable during transition, but it should not remain vague forever.
 
 ### 5. Presentation credibility still matters
 Even small issues like README glitches or public-facing wording drift can damage confidence more than they "deserve" to.
@@ -231,7 +233,7 @@ That is annoying, but true.
 
 ## What this project is *not* right now
 
-To avoid self-deception, SoulClaw is **not** currently:
+To avoid self-deception, LumaClaw is **not** currently:
 
 - a finished desktop companion product
 - a fully integrated relationship-aware assistant
@@ -245,22 +247,22 @@ It means the current stage should be described honestly.
 
 ## What the next three priorities should be
 
-### Priority 1 — Add SoulBond state validation + migration
-This protects the part of the project that is already real.
+### Priority 1 — Sync the project-state docs to current code reality
+The repo has moved slightly ahead of parts of the tactical planning layer. The first job now is to mark landed work honestly, downgrade stale checkpoints, and stop treating already-landed behavior mapping as if it were still pending implementation.
 
-### Priority 2 — Make SoulBond settings affect real runtime behavior
-This is the shortest path from "interesting internal subsystem" to "actual differentiated user experience."
+### Priority 2 — Formalize the first functional UI slice around SoulBond status
+The correct first product-facing slice is not decorative avatar work. It is the existing SoulBond status card / overview path: make the current relationship state, tone mode, and latest daily result legible as a real product surface.
 
-### Priority 3 — Finish current transition cleanup at the public/runtime surface
-This improves credibility, legibility, and contribution clarity without requiring a giant rewrite.
+### Priority 3 — Continue state hardening and careful transition cleanup
+SoulBond state evolution still needs discipline, and the public/runtime LumaClaw vs OpenClaw split still needs steady cleanup. Both matter, but neither should displace the immediate need to align project truth with what is already landed.
 
 ---
 
 ## Practical current-stage summary
 
-If someone asked, "What stage is SoulClaw in?", the best answer is:
+If someone asked, "What stage is LumaClaw in?", the best answer is:
 
-> SoulClaw is past concept stage and already has a real SoulBond MVP, but it is still in the stage where behavior integration and product surfacing matter more than adding more theoretical future features.
+> LumaClaw is past concept stage and already has a real SoulBond MVP, but it is still in the stage where behavior integration and product surfacing matter more than adding more theoretical future features.
 
 Or even shorter:
 

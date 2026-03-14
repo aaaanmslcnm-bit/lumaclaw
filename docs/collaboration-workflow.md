@@ -23,9 +23,10 @@ It exists to prevent role confusion, fake-running agent tasks, and old workflow 
 - takes over failed tasks when needed
 
 ### Akane
-- controlled coordination deputy
+- Yukino's deputy in project work
 - risk scanning / read-only review
 - bounded execution support
+- external organizer / 外挂整理员 for pitfalls, principles, case studies, and drift-watch materials
 - may call external expert agents only after Yukino approval
 
 ### Codex
@@ -48,6 +49,9 @@ It exists to prevent role confusion, fake-running agent tasks, and old workflow 
 
 ### 1. Yukino remains the single final reviewer
 No task is considered project truth until Yukino reviews it.
+
+Accepted / rejected / stale / superseded judgments should not live only in chat.
+For bounded project truth, Yukino should write the result into `docs/acceptance-log.md`.
 
 ### 2. Tasks must be split before they are delegated
 Codex and Akane should receive bounded tasks, not broad "fix the whole project" prompts.
@@ -99,6 +103,8 @@ Keep under Yukino control:
 3. A bounded task is delegated
 4. Output must come back in structured form
 5. Yukino reviews and decides whether it is accepted
+6. The judgment is written into `docs/acceptance-log.md`
+7. If that judgment changes current project reality or next-step ordering, the relevant state docs are synced
 
 ## Why this matters
 

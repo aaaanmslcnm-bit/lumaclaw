@@ -41,9 +41,11 @@ The project is no longer at "idea stage," but it is not yet at "finished product
 
 For the current phase, LumaClaw development follows this model (see also [`docs/collaboration-workflow.md`](docs/collaboration-workflow.md)):
 
-- Yukino leads scope, architecture, and acceptance criteria
+- Yukino leads scope, architecture, acceptance criteria, and final project truth
+- Akane acts as Yukino's deputy for bounded scouting, coordination support, and external experience-layer organization
 - Codex handles bounded implementation work
 - Yukino reviews the result before it is treated as project truth
+- accepted / stale / superseded judgments should be written into `docs/acceptance-log.md`
 - final user-facing delivery should include both implementation result and Yukino's acceptance judgment / next-step recommendation
 - real engineering continues in the heavier fork-stage development repo, while public GitHub updates are synchronized as cleaner public snapshots instead of forcing every upstream-heavy history change directly into the public repository
 - npm remains intentionally split: the public `lumaclaw` package name is currently held by a minimal placeholder package until the full runtime package can be published cleanly

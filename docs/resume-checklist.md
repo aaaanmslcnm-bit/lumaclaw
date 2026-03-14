@@ -1,4 +1,4 @@
-# SoulClaw Resume Checklist
+# LumaClaw Resume Checklist
 
 _Last updated: 2026-03-10 18:18 (Asia/Shanghai)_
 
@@ -32,24 +32,19 @@ Use it when resuming after server/provider instability.
 
 ## Highest-priority next actions when server is stable
 
-### 1. Re-dispatch the real reply-boundary task
-Task to send:
-- `soulbond-tone-reply-boundary-mvp`
-
+### 1. Continue the first functional UI slice with a narrow explanation-panel follow-up
 Goal:
-- integrate `getSoulBondToneFromState()` into the first real reply boundary
-- preferred boundary: `src/auto-reply/reply/get-reply-run.ts`
+- make the SoulBond card easier to interpret
+- help the UI answer why the current state / tone / latest daily result look the way they do
+- improve demo legibility without expanding into a dashboard
 
-Notes:
-- a previous attempt failed because the outer dispatcher was still launched with inline `-p`, so the prompt was split before `task-prompt.txt` was written
-- the dispatcher now supports `--prompt-file`, and the dispatch-level smoke test passed
-- keep scope tight
-- no global system prompt rewrite
-- no avatar/voice/UI
-- no migration work
+Current finding:
+- the first SoulBond overview-card implementation pass is already landed
+- the next product-facing gap is explanation, not state visibility from scratch
+- the follow-up should stay narrow and preserve runtime vs preview honesty
 
-### 2. Review the result with the normal acceptance format
-When Codex returns, review with:
+### 2. Use the normal acceptance format only for true gaps and bounded follow-ups
+When the explanation-panel pass lands (or if it fails for a real product/code reason), review with:
 - task title
 - files changed
 - implementation strategy
@@ -59,38 +54,32 @@ When Codex returns, review with:
 - score
 - next-step suggestion
 
-### 3. Re-run the functional UI scout only if needed
+### 3. Keep richer runtime data exposure as a later follow-up, not tonight's main move
 Current status:
-- the previous UI scout failed / not accepted
-- failure mode: it drifted into workspace-wide/context-heavy search instead of staying repo-local and UI-focused
+- explanation is the next cleaner step than broadening runtime surface immediately
+- richer runtime data exposure may still matter later, but it is not the current narrow follow-up
 
-If re-running, harden it further:
-- repo-local only
-- no workspace-wide search
-- no AGENTS / MEMORY / workspace file trawling
-- read-only
-- must answer only: best first functional UI slice for current stage
-- if that still looks noisy, Yukino should make the first-slice decision directly instead of delegating it
+Decision rule:
+- prefer explanation-panel polish first
+- keep scope functional and explanatory
+- do not drift into avatar / voice / decorative work yet
 
 ---
 
-## Planned sequence after the next successful Codex task
+## Planned sequence from the current reality state
 
-### A. If `soulbond-tone-reply-boundary-mvp` is accepted
-Then move to:
-- first functional UI slice decision
-- first functional UI slice implementation
+### A. The first functional UI slice is now landed
+- the overview/status-card path is accepted as the first product-facing SoulBond slice
+- do not reopen slice selection unless reality changes
 
-### B. If the boundary task fails due to server/provider instability only
-Then:
-- do not redesign the task immediately
-- retry once the upstream route is stable
+### B. Next, add the narrow explanation-panel follow-up
+- improve interpretability of current SoulBond state
+- keep runtime vs preview honesty
+- keep the pass bounded
 
-### C. If the boundary task drifts in scope
-Then:
-- tighten the spec further
-- add changed-file gate
-- re-dispatch only after narrowing the allowed files again
+### C. Only then consider richer runtime data exposure or the next explanatory layer
+- do not jump straight to broad dashboard work
+- do not reopen old boundary tasks unless a real defect is found
 
 ---
 
@@ -122,4 +111,4 @@ These can wait until the current Phase 2 foothold is stable.
 
 Next real move after server stability:
 
-> Re-dispatch `soulbond-tone-reply-boundary-mvp`, review it, then choose/build the first functional UI slice.
+> Keep the first SoulBond UI slice as landed, then implement the narrow explanation-panel follow-up so the overview helps explain why the current state and tone look the way they do.
