@@ -265,11 +265,26 @@ export class SoulBondStatusCard extends LitElement {
         var(--card, #181b22);
     }
 
+    .detail-card--source {
+      background:
+        linear-gradient(135deg, rgba(59, 130, 246, 0.08), transparent 50%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 60%),
+        var(--card, #181b22);
+    }
+
     .detail-copy {
       margin-top: 8px;
       color: var(--text, #e4e4e7);
       font-size: 14px;
       line-height: 1.55;
+    }
+
+    .source-state {
+      margin-top: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-strong, #fafafa);
     }
 
     .delta-chip {
@@ -347,7 +362,9 @@ export class SoulBondStatusCard extends LitElement {
           <div>
             <div class="eyebrow">SoulBond status</div>
             <div class="title">Relationship state at a glance</div>
-            <div class="subtitle">${model.sourceHint}</div>
+            <div class="subtitle">
+              Current bond, stage, tone behavior, and the latest daily result in one place.
+            </div>
           </div>
           <div class="badges">
             <span class="badge ${sourceBadgeClass}">${sourceLabel}</span>
@@ -395,6 +412,12 @@ export class SoulBondStatusCard extends LitElement {
           <div class="detail-card detail-card--guidance">
             <div class="detail-label">Guidance</div>
             <div class="detail-copy">${model.guidance}</div>
+          </div>
+
+          <div class="detail-card detail-card--source">
+            <div class="detail-label">Source state</div>
+            <div class="source-state">${sourceLabel}</div>
+            <div class="detail-copy">${model.sourceHint}</div>
           </div>
         </div>
       </section>

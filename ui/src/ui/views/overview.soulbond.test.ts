@@ -60,6 +60,7 @@ describe("overview SoulBond status card", () => {
     const content = card.shadowRoot?.textContent ?? "";
 
     expect(content).toContain("Preview state");
+    expect(content).toContain("Source state");
     expect(content).toContain("Current bond");
     expect(content).toContain("36");
     expect(content).toContain("Current stage");
@@ -70,6 +71,9 @@ describe("overview SoulBond status card", () => {
     expect(content).toContain("Mapped");
     expect(content).toContain("Latest daily result");
     expect(content).toContain("78/100 day, bond +4, stage held at Close.");
+    expect(content).toContain(
+      "Preview fallback because the current gateway snapshot does not expose SoulBond state here yet.",
+    );
     expect(content).toContain("Guidance");
     expect(content).toContain(
       "Can speak in a relaxed and steady way without being too distant.",
@@ -108,11 +112,13 @@ describe("overview SoulBond status card", () => {
     const content = card.shadowRoot?.textContent ?? "";
 
     expect(content).toContain("Runtime state");
+    expect(content).toContain("Source state");
     expect(content).toContain("86");
     expect(content).toContain("Resonant");
     expect(content).toContain("Reserved");
     expect(content).toContain("Fixed");
     expect(content).toContain("58/100 day, bond -2, stage held at Resonant.");
+    expect(content).toContain("Live SoulBond state from the current gateway snapshot.");
     expect(content).toContain("Pinned to the default reserved tone.");
     expect(content).toContain("Tone mapping is disabled; stay polite, measured, and not too intimate yet.");
   });

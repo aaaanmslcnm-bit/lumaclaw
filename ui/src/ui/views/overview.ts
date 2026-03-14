@@ -180,8 +180,8 @@ function buildSoulBondStatusCardModel(
     source,
     sourceHint:
       source === "runtime"
-        ? "Live runtime snapshot from SoulBond state."
-        : "Preview state inside the overview card until live SoulBond data is exposed here.",
+        ? "Live SoulBond state from the current gateway snapshot."
+        : "Preview fallback because the current gateway snapshot does not expose SoulBond state here yet.",
   };
 }
 
