@@ -1,9 +1,9 @@
 import path from "node:path";
 
-export const DEFAULT_CLI_NAME = "soulclaw";
+export const DEFAULT_CLI_NAME = "lumaclaw";
 
-const KNOWN_CLI_NAMES = new Set([DEFAULT_CLI_NAME, "openclaw"]);
-const CLI_PREFIX_RE = /^(?:((?:pnpm|npm|bunx|npx)\s+))?(?:openclaw|soulclaw)\b/;
+const KNOWN_CLI_NAMES = new Set([DEFAULT_CLI_NAME, "soulclaw", "openclaw"]);
+const CLI_PREFIX_RE = /^(?:((?:pnpm|npm|bunx|npx)\s+))?(?:lumaclaw|openclaw|soulclaw)\b/;
 const CLI_WRAPPER_EXT_RE = /\.(?:cmd|ps1|exe|mjs|cjs|js)$/i;
 
 function normalizeCliBasename(value: string): string {

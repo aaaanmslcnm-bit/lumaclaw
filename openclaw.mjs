@@ -9,7 +9,13 @@ const MIN_NODE_VERSION = `${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}`;
 const CLI_NAME = (() => {
   const argv0 = process.argv[1] ?? "";
   const base = path.basename(argv0).toLowerCase();
-  return base.includes("soulclaw") ? "soulclaw" : "openclaw";
+  if (base.includes("lumaclaw")) {
+    return "lumaclaw";
+  }
+  if (base.includes("soulclaw")) {
+    return "soulclaw";
+  }
+  return "openclaw";
 })();
 
 const parseNodeVersion = (rawVersion) => {

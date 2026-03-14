@@ -76,13 +76,13 @@ export function registerChannelsCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["soulclaw channels list", "List configured channels and auth profiles."],
-          ["soulclaw channels status --probe", "Run channel status checks and probes."],
+          ["lumaclaw channels list", "List configured channels and auth profiles."],
+          ["lumaclaw channels status --probe", "Run channel status checks and probes."],
           [
-            "soulclaw channels add --channel telegram --token <token>",
+            "lumaclaw channels add --channel telegram --token <token>",
             "Add or update a channel account non-interactively.",
           ],
-          ["soulclaw channels login --channel whatsapp", "Link a WhatsApp Web account."],
+          ["lumaclaw channels login --channel whatsapp", "Link a WhatsApp Web account."],
         ])}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/channels",
           "docs.openclaw.ai/cli/channels",

@@ -143,7 +143,7 @@ At the current fork stage, the most honest/reliable setup is **from source**.
 LumaClaw's public package/release story is still being separated from the upstream OpenClaw base, so source install is the clearest path for now.
 
 ```bash
-git clone https://github.com/<your-org>/lumaclaw.git
+git clone https://github.com/Yukino-Akane/lumaclaw.git
 cd LumaClaw
 
 corepack pnpm install
@@ -192,7 +192,7 @@ Details: [Development channels](https://docs.openclaw.ai/install/development-cha
 Prefer `pnpm` for builds from source. Bun is optional for running TypeScript directly.
 
 ```bash
-git clone https://github.com/<your-org>/lumaclaw.git
+git clone https://github.com/Yukino-Akane/lumaclaw.git
 cd LumaClaw
 
 corepack pnpm install

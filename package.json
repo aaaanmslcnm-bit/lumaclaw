@@ -9,18 +9,18 @@
     "companion",
     "open-source"
   ],
-  "homepage": "https://github.com/<your-org>/lumaclaw#readme",
+  "homepage": "https://github.com/Yukino-Akane/lumaclaw#readme",
   "bugs": {
-    "url": "https://github.com/<your-org>/lumaclaw/issues"
+    "url": "https://github.com/Yukino-Akane/lumaclaw/issues"
   },
   "license": "MIT",
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/<your-org>/lumaclaw.git"
+    "url": "git+https://github.com/Yukino-Akane/lumaclaw.git"
   },
   "bin": {
-    "lumaclaw": "soulclaw.mjs",
+    "lumaclaw": "lumaclaw.mjs",
     "soulclaw": "soulclaw.mjs",
     "openclaw": "openclaw.mjs"
   },
@@ -48,6 +48,7 @@
     "docs.acp.md",
     "fly.private.toml",
     "fly.toml",
+    "lumaclaw.mjs",
     "openclaw.mjs",
     "openclaw.podman.env",
     "render.yaml",
@@ -241,7 +242,7 @@
       "types": "./dist/plugin-sdk/keyed-async-queue.d.ts",
       "default": "./dist/plugin-sdk/keyed-async-queue.js"
     },
-    "./cli-entry": "./openclaw.mjs"
+    "./cli-entry": "./lumaclaw.mjs"
   },
   "scripts": {
     "android:assemble": "cd apps/android && ./gradlew :app:assembleDebug",
