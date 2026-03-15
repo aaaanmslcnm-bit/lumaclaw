@@ -237,9 +237,9 @@ The right order is still:
 
 ---
 
-## Immediate next priorities
+## Product-layer next priorities (after baseline stabilization)
 
-These are the three highest-leverage roadmap items right now:
+Once the repository baseline and public-facing project truth are stable enough to trust, these are the three highest-leverage roadmap items:
 
 ### 1. SoulBond state validation and migration
 Because versioned state already exists, and long-term continuity will become fragile without it.

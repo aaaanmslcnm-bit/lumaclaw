@@ -1,6 +1,6 @@
 # LumaClaw Current State
 
-_Last updated: 2026-03-10_
+_Last updated: 2026-03-15_
 
 This file is the reality layer for the project.
 
@@ -10,6 +10,41 @@ It exists to answer a simpler question:
 > **What is actually real in LumaClaw right now, what is still incomplete, and what should be done next?**
 
 ---
+
+## Project identity
+
+**LumaClaw** is the current public project identity.
+It is the continuation of the project line that originally developed under the name **SoulClaw**.
+
+The rename was driven by public naming and package-availability constraints rather than by a reset of the core direction. The project should therefore be understood as a **continuity migration**, not as a brand-new codebase.
+
+## Historical context
+
+The public GitHub repository was not created from a fully normalized release branch.
+It was initialized from an in-progress local working tree during an active transition period.
+
+That means the repo currently contains a mix of:
+
+- current LumaClaw-facing structure and identity
+- historical SoulClaw-era naming and assumptions
+- migration-period workflow and configuration residue
+- engineering debt that became clearly visible only after public CI/checks were exercised systematically
+
+This context matters. Many current failures are better classified as **migration debt and repository-normalization debt**, not as evidence that the core project direction is invalid.
+
+## Current phase
+
+LumaClaw is currently in a **baseline-hardening and alignment phase**.
+
+Primary goals of this phase:
+
+- make the public repository internally consistent
+- align naming across docs, CLI, UI, workflows, and entrypoints
+- stabilize CI/checks so the repo reflects a trustworthy engineering baseline
+- ensure install and build paths are reproducible
+- separate historical residue from intentional current architecture
+
+This phase is about normalizing the public repo, not redefining the product from zero.
 
 ## Short version
 
@@ -23,6 +58,52 @@ In plainer language:
 - the differentiator is real enough to demo
 - the integration layer is still behind the core logic
 - the project is in a fork transition, not at finished product form
+
+## Technical debt classification
+
+### Reasonable / expected migration debt
+
+These are understandable given the project's history and do not, by themselves, indicate a broken direction:
+
+- residual `SoulClaw` naming in docs, scripts, comments, or secondary entrypoints
+- workflow assumptions inherited from earlier infrastructure choices
+- partial mismatch between public branding and internal historical terminology
+- repository inconsistencies only discovered after CI/checks were exercised on GitHub
+- migration-era documentation drift
+
+These should be cleaned steadily, but their existence is not surprising.
+
+### Immediate-cleanup debt
+
+These must be treated as active blockers because they directly reduce repository credibility or operational stability:
+
+- failing or stalled primary CI/checks
+- contradictions between lockfile expectations, scripts, Dockerfiles, and repository tracking rules
+- broken or unstable install/build smoke paths
+- public-facing naming inconsistencies in core entrypoints
+- workflow/configuration drift that creates repeated false failures or prevents reliable validation
+
+These are not cosmetic. They directly affect trust, reproducibility, and external readability.
+
+## Near-term priorities
+
+### P0 — Immediate
+- stabilize the main PR/CI path
+- keep dependency and install contracts internally consistent
+- ensure install smoke and Docker build paths are valid
+- eliminate workflow assumptions that no longer match current runners or infrastructure
+- align core public-facing identity across the most visible surfaces
+
+### P1 — Short-term
+- clean high-visibility `SoulClaw` residue in docs and main project surfaces
+- normalize repo-level documentation (`README`, `CURRENT_STATE`, acceptance logs, roadmap/resume docs)
+- update outdated links, names, and workflow conventions
+- reduce avoidable CI noise and infra ambiguity
+
+### P2 — Later cleanup
+- clean lower-visibility historical naming in comments and secondary scripts
+- archive or document superseded historical artifacts
+- improve external storytelling and packaging polish after the baseline is stable
 
 ---
 
@@ -245,7 +326,9 @@ It means the current stage should be described honestly.
 
 ---
 
-## What the next three priorities should be
+## Product-facing next three priorities (after baseline stabilization)
+
+Once the repository baseline is stable enough to trust, the next three product-facing priorities should be:
 
 ### Priority 1 — Sync the project-state docs to current code reality
 The repo has moved slightly ahead of parts of the tactical planning layer. The first job now is to mark landed work honestly, downgrade stale checkpoints, and stop treating already-landed behavior mapping as if it were still pending implementation.

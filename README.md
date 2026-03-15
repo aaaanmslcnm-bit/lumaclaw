@@ -4,7 +4,9 @@
 
 An open-source companion-oriented desktop AI assistant built on OpenClaw.
 
-LumaClaw is the public product/release line for this fork-stage codebase. Internally, parts of the repo may still refer to the earlier SoulClaw project line while the public-facing package and release surface are being unified.
+LumaClaw is the current public identity of a project that originally evolved under the working name **SoulClaw**. The project did not begin as a clean-sheet, release-ready repository. It started as an experimental multi-agent and companion-oriented system, then gradually expanded into a broader product surface covering CLI, UI, workflow automation, installation paths, and relationship-layer features.
+
+During that evolution, the original **SoulClaw** name became unavailable for public use, so the project was renamed to **LumaClaw**. The public repository was then initialized from an actively evolving local codebase rather than from a fully cleaned release snapshot. Because of that, some historical naming residue, workflow assumptions, and migration-era inconsistencies may still appear in the repository while the public-facing package and release surface are being unified.
 
 LumaClaw keeps the real agent capabilities of OpenClaw — tools, automation, browser control, local actions, skills, channels, and local computer control — while adding a companion layer focused on continuity, relationship growth, voice/avatar customization, and future desktop presence.
 
@@ -36,13 +38,17 @@ The most honest description of the project right now is:
 
 > **A strong upstream agent foundation plus a real SoulBond MVP, with product integration still in progress.**
 
+The current phase is best understood as a **public-repo normalization and baseline-hardening phase**, not as a restart from scratch.
+
 Current public stage:
 
-- the repo is in an active fork transition from OpenClaw to LumaClaw as the public release line
+- the repo is in an active continuity migration from SoulClaw into LumaClaw as the public release line
 - the SoulBond core loop already exists and is runnable
 - the project is stronger on core logic than on visible integration
 - the long-term companion layer is defined more clearly than it is currently surfaced
-- the public GitHub repo and the `lumaclaw` npm package name are now occupied, but the release workflow is intentionally split into separate development, public, and npm packaging tracks
+- the main work right now is to align naming, workflows, installation paths, and repository consistency with the public project identity
+
+This means some visible rough edges are migration debt rather than evidence that the project direction has been abandoned or replaced.
 
 ### Already real
 
