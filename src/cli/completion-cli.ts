@@ -43,7 +43,7 @@ export function resolveShellFromEnv(env: NodeJS.ProcessEnv = process.env): Compl
 function sanitizeCompletionBasename(value: string): string {
   const trimmed = value.trim();
   if (!trimmed) {
-    return "soulclaw";
+    return "openclaw";
   }
   return trimmed.replace(/[^a-zA-Z0-9._-]/g, "-");
 }
@@ -63,7 +63,7 @@ export function resolveCompletionCachePath(shell: CompletionShell, binName: stri
 /** Check if the completion cache file exists for the given shell. */
 export async function completionCacheExists(
   shell: CompletionShell,
-  binName = "soulclaw",
+  binName = "openclaw",
 ): Promise<boolean> {
   const cachePath = resolveCompletionCachePath(shell, binName);
   return pathExists(cachePath);
@@ -108,8 +108,7 @@ function formatCompletionSourceLine(
 }
 
 function isCompletionProfileHeader(line: string): boolean {
-  const trimmed = line.trim();
-  return trimmed === "# SoulClaw Completion" || trimmed === "# OpenClaw Completion";
+  return line.trim() === "# OpenClaw Completion";
 }
 
 function isCompletionProfileLine(line: string, binName: string, cachePath: string | null): boolean {
@@ -156,7 +155,7 @@ function updateCompletionProfile(
   }
 
   const trimmed = filtered.join("\n").trimEnd();
-  const block = `# SoulClaw Completion\n${sourceLine}`;
+  const block = `# OpenClaw Completion\n${sourceLine}`;
   const next = trimmed ? `${trimmed}\n\n${block}\n` : `${block}\n`;
   return { next, changed: next !== content, hadExisting };
 }
@@ -186,7 +185,7 @@ function getShellProfilePath(shell: CompletionShell): string {
 
 export async function isCompletionInstalled(
   shell: CompletionShell,
-  binName = "soulclaw",
+  binName = "openclaw",
 ): Promise<boolean> {
   const profilePath = getShellProfilePath(shell);
 
@@ -208,7 +207,7 @@ export async function isCompletionInstalled(
  */
 export async function usesSlowDynamicCompletion(
   shell: CompletionShell,
-  binName = "soulclaw",
+  binName = "openclaw",
 ): Promise<boolean> {
   const profilePath = getShellProfilePath(shell);
 
@@ -301,7 +300,7 @@ export function registerCompletionCli(program: Command) {
     });
 }
 
-export async function installCompletion(shell: string, yes: boolean, binName = "soulclaw") {
+export async function installCompletion(shell: string, yes: boolean, binName = "openclaw") {
   const home = process.env.HOME || os.homedir();
   let profilePath = "";
   let sourceLine = "";

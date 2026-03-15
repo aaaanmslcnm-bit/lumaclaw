@@ -1,8 +1,6 @@
-# LumaClaw Docker Compose template
-# Fork-stage note: inherited `OPENCLAW_*` env vars remain for runtime compatibility.
 services:
-  lumaclaw-gateway:
-    image: ${OPENCLAW_IMAGE:-lumaclaw:local}
+  openclaw-gateway:
+    image: ${OPENCLAW_IMAGE:-openclaw:local}
     environment:
       HOME: /home/node
       TERM: xterm-256color
@@ -11,6 +9,7 @@ services:
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
+      TZ: ${OPENCLAW_TZ:-UTC}
     volumes:
       - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
       - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
@@ -50,9 +49,9 @@ services:
       retries: 5
       start_period: 20s
 
-  lumaclaw-cli:
-    image: ${OPENCLAW_IMAGE:-lumaclaw:local}
-    network_mode: "service:lumaclaw-gateway"
+  openclaw-cli:
+    image: ${OPENCLAW_IMAGE:-openclaw:local}
+    network_mode: "service:openclaw-gateway"
     cap_drop:
       - NET_RAW
       - NET_ADMIN
@@ -67,6 +66,7 @@ services:
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
+      TZ: ${OPENCLAW_TZ:-UTC}
     volumes:
       - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
       - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
@@ -75,4 +75,4 @@ services:
     init: true
     entrypoint: ["node", "dist/index.js"]
     depends_on:
-      - lumaclaw-gateway
+      - openclaw-gateway

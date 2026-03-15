@@ -44,16 +44,16 @@ export function registerUpdateCli(program: Command) {
     .option("--yes", "Skip confirmation prompts (non-interactive)", false)
     .addHelpText("after", () => {
       const examples = [
-        ["soulclaw update", "Update a source checkout (git)"],
-        ["soulclaw update --channel beta", "Switch to beta channel (git + npm)"],
-        ["soulclaw update --channel dev", "Switch to dev channel (git + npm)"],
-        ["soulclaw update --tag beta", "One-off update to a dist-tag or version"],
-        ["soulclaw update --dry-run", "Preview actions without changing anything"],
-        ["soulclaw update --no-restart", "Update without restarting the service"],
-        ["soulclaw update --json", "Output result as JSON"],
-        ["soulclaw update --yes", "Non-interactive (accept downgrade prompts)"],
-        ["soulclaw update wizard", "Interactive update wizard"],
-        ["soulclaw --update", "Shorthand for soulclaw update"],
+        ["openclaw update", "Update a source checkout (git)"],
+        ["openclaw update --channel beta", "Switch to beta channel (git + npm)"],
+        ["openclaw update --channel dev", "Switch to dev channel (git + npm)"],
+        ["openclaw update --tag beta", "One-off update to a dist-tag or version"],
+        ["openclaw update --dry-run", "Preview actions without changing anything"],
+        ["openclaw update --no-restart", "Update without restarting the service"],
+        ["openclaw update --json", "Output result as JSON"],
+        ["openclaw update --yes", "Non-interactive (accept downgrade prompts)"],
+        ["openclaw update wizard", "Interactive update wizard"],
+        ["openclaw --update", "Shorthand for openclaw update"],
       ] as const;
       const fmtExamples = examples
         .map(([cmd, desc]) => `  ${theme.command(cmd)} ${theme.muted(`# ${desc}`)}`)
@@ -65,7 +65,7 @@ ${theme.heading("What this does:")}
 
 ${theme.heading("Switch channels:")}
   - Use --channel stable|beta|dev to persist the update channel in config
-  - Run soulclaw update status to see the active channel and source
+  - Run openclaw update status to see the active channel and source
   - Use --tag <dist-tag|version> for a one-off npm update without persisting
 
 ${theme.heading("Non-interactive:")}

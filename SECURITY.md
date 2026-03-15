@@ -1,32 +1,21 @@
 # Security Policy
 
-LumaClaw is currently the public product/release line for a fork-stage project built on top of OpenClaw.
-
-That means security issues may fall into one of three buckets:
-
-- **SoulClaw-specific** issues introduced by fork changes
-- **upstream-derived** issues inherited from OpenClaw
-- **boundary issues** at the point where SoulClaw-specific behavior and upstream behavior meet
+If you believe you've found a security issue in OpenClaw, please report it privately.
 
 ## Reporting
 
-If you believe you've found a security issue in SoulClaw, report it privately.
+Report vulnerabilities directly to the repository where the issue lives:
 
-Current guidance:
+- **Core CLI and gateway** — [openclaw/openclaw](https://github.com/openclaw/openclaw)
+- **macOS desktop app** — [openclaw/openclaw](https://github.com/openclaw/openclaw) (apps/macos)
+- **iOS app** — [openclaw/openclaw](https://github.com/openclaw/openclaw) (apps/ios)
+- **Android app** — [openclaw/openclaw](https://github.com/openclaw/openclaw) (apps/android)
+- **ClawHub** — [openclaw/clawhub](https://github.com/openclaw/clawhub)
+- **Trust and threat model** — [openclaw/trust](https://github.com/openclaw/trust)
 
-- If the issue is clearly caused by SoulClaw-specific changes, report it against the SoulClaw repository/security intake path used by the fork maintainer.
-- If the issue appears clearly upstream-derived and reproducible on unmodified OpenClaw, note that explicitly in your report.
-- If you're unsure which side owns the issue, say so. Misclassification is less of a problem than silent assumptions.
+For issues that don't fit a specific repo, or if you're unsure, email **[security@openclaw.ai](mailto:security@openclaw.ai)** and we'll route it.
 
-Important fork-stage note:
-
-> SoulClaw is still separating its public-facing project identity from inherited upstream runtime and documentation surfaces.
-> Until that split is fully complete, reports should describe whether the issue looks fork-specific, upstream-derived, or uncertain.
-
-The reporting quality bar remains the same: private disclosure, clear reproduction, demonstrated impact, and enough technical detail for triage.
-
-Most of the detailed security/trust guidance below is still inherited from the upstream OpenClaw base and retained here because it remains operationally relevant to the current fork.
-Read it as the current technical trust model reference, not as a claim that SoulClaw is already fully separated at every policy/documentation layer.
+For full reporting instructions see our [Trust page](https://trust.openclaw.ai).
 
 ### Required in Reports
 
@@ -48,6 +37,7 @@ For fastest triage, include all of the following:
 - Exact vulnerable path (`file`, function, and line range) on a current revision.
 - Tested version details (OpenClaw version and/or commit SHA).
 - Reproducible PoC against latest `main` or latest released version.
+- If the claim targets a released version, evidence from the shipped tag and published artifact/package for that exact version (not only `main`).
 - Demonstrated impact tied to OpenClaw's documented trust boundaries.
 - For exposed-secret reports: proof the credential is OpenClaw-owned (or grants access to OpenClaw-operated infrastructure/services).
 - Explicit statement that the report does not rely on adversarial operators sharing one gateway host/config.
@@ -66,6 +56,7 @@ These are frequently reported but are typically closed with no code change:
 - Authorized user-triggered local actions presented as privilege escalation. Example: an allowlisted/owner sender running `/export-session /absolute/path.html` to write on the host. In this trust model, authorized user actions are trusted host actions unless you demonstrate an auth/sandbox/boundary bypass.
 - Reports that only show a malicious plugin executing privileged actions after a trusted operator installs/enables it.
 - Reports that assume per-user multi-tenant authorization on a shared gateway host/config.
+- Reports that treat the Gateway HTTP compatibility endpoints (`POST /v1/chat/completions`, `POST /v1/responses`) as if they implemented scoped operator auth (`operator.write` vs `operator.admin`). These endpoints authenticate the shared Gateway bearer secret/password and are documented full operator-access surfaces, not per-user/per-scope boundaries.
 - Reports that only show differences in heuristic detection/parity (for example obfuscation-pattern detection on one exec path but not another, such as `node.invoke -> system.run` parity gaps) without demonstrating bypass of auth, approvals, allowlist enforcement, sandboxing, or other documented trust boundaries.
 - ReDoS/DoS claims that require trusted operator configuration input (for example catastrophic regex in `sessionFilter` or `logging.redactPatterns`) without a trust-boundary bypass.
 - Archive/install extraction claims that require pre-existing local filesystem priming in trusted state (for example planting symlink/hardlink aliases under destination directories such as skills/tools paths) without showing an untrusted path that can create/control that primitive.
@@ -76,6 +67,7 @@ These are frequently reported but are typically closed with no code change:
 - Discord inbound webhook signature findings for paths not used by this repo's Discord integration.
 - Claims that Microsoft Teams `fileConsent/invoke` `uploadInfo.uploadUrl` is attacker-controlled without demonstrating one of: auth boundary bypass, a real authenticated Teams/Bot Framework event carrying attacker-chosen URL, or compromise of the Microsoft/Bot trust path.
 - Scanner-only claims against stale/nonexistent paths, or claims without a working repro.
+- Reports that restate an already-fixed issue against later released versions without showing the vulnerable path still exists in the shipped tag or published artifact for that later version.
 
 ### Duplicate Report Handling
 
@@ -85,19 +77,12 @@ These are frequently reported but are typically closed with no code change:
 
 ## Security & Trust
 
-SoulClaw does not currently present itself as having a fully separate, mature security program from its upstream base.
-
-At the current fork stage, the practical rule is simple:
-
-- disclose responsibly
-- provide a technically serious report
-- make it clear whether the issue looks fork-specific, upstream-derived, or uncertain
+**Jamieson O'Reilly** ([@theonejvo](https://twitter.com/theonejvo)) is Security & Trust at OpenClaw. Jamieson is the founder of [Dvuln](https://dvuln.com) and brings extensive experience in offensive security, penetration testing, and security program development.
 
 ## Bug Bounties
 
-SoulClaw does not currently offer a bug bounty program or paid vulnerability program.
-Please still disclose responsibly so issues can be triaged and fixed quickly.
-The most useful help right now is high-quality reporting or focused corrective PRs.
+OpenClaw is a labor of love. There is no bug bounty program and no budget for paid reports. Please still disclose responsibly so we can fix issues quickly.
+The best way to help the project right now is by sending PRs.
 
 ## Maintainers: GHSA Updates via CLI
 
@@ -108,6 +93,7 @@ When patching a GHSA via `gh api`, include `X-GitHub-Api-Version: 2022-11-28` (o
 OpenClaw does **not** model one gateway as a multi-tenant, adversarial user boundary.
 
 - Authenticated Gateway callers are treated as trusted operators for that gateway instance.
+- The HTTP compatibility endpoints (`POST /v1/chat/completions`, `POST /v1/responses`) are in that same trusted-operator bucket. Passing Gateway bearer auth there is equivalent to operator access for that gateway; they do not implement a narrower `operator.write` vs `operator.admin` trust split.
 - Session identifiers (`sessionKey`, session IDs, labels) are routing controls, not per-user authorization boundaries.
 - If one operator can view data from another operator on the same gateway, that is expected in this trust model.
 - OpenClaw can technically run multiple gateway instances on one machine, but recommended operations are clean separation by trust boundary.
@@ -143,6 +129,7 @@ Plugins/extensions are part of OpenClaw's trusted computing base for a gateway.
 - Any report whose only claim is that an operator-enabled `dangerous*`/`dangerously*` config option weakens defaults (these are explicit break-glass tradeoffs by design)
 - Reports that depend on trusted operator-supplied configuration values to trigger availability impact (for example custom regex patterns). These may still be fixed as defense-in-depth hardening, but are not security-boundary bypasses.
 - Reports whose only claim is heuristic/parity drift in command-risk detection (for example obfuscation-pattern checks) across exec surfaces, without a demonstrated trust-boundary bypass. These are hardening-only findings and are not vulnerabilities; triage may close them as `invalid`/`no-action` or track them separately as low/informational hardening.
+- Reports whose only claim is that exec approvals do not semantically model every interpreter/runtime loader form, subcommand, flag combination, package script, or transitive module/config import. Exec approvals bind exact request context and best-effort direct local file operands; they are not a complete semantic model of everything a runtime may load.
 - Exposed secrets that are third-party/user-controlled credentials (not OpenClaw-owned and not granting access to OpenClaw-operated infrastructure/services) without demonstrated OpenClaw impact
 - Reports whose only claim is host-side exec when sandbox runtime is disabled/unavailable (documented default behavior in the trusted-operator model), without a boundary bypass.
 - Reports whose only claim is that a platform-provided upload destination URL is untrusted (for example Microsoft Teams `fileConsent/invoke` `uploadInfo.uploadUrl`) without proving attacker control in an authenticated production flow.
@@ -162,6 +149,7 @@ OpenClaw security guidance assumes:
 OpenClaw's security model is "personal assistant" (one trusted operator, potentially many agents), not "shared multi-tenant bus."
 
 - If multiple people can message the same tool-enabled agent (for example a shared Slack workspace), they can all steer that agent within its granted permissions.
+- Non-owner sender status only affects owner-only tools/commands. If a non-owner can still access a non-owner-only tool on that same agent (for example `canvas`), that is within the granted tool boundary unless the report demonstrates an auth, policy, allowlist, approval, or sandbox bypass.
 - Session or memory scoping reduces context bleed, but does **not** create per-user host authorization boundaries.
 - For mixed-trust or adversarial users, isolate by OS user/host/gateway and use separate credentials per boundary.
 - A company-shared agent can be a valid setup when users are in the same trust boundary and the agent is strictly business-only.
@@ -183,6 +171,7 @@ OpenClaw separates routing from execution, but both remain inside the same opera
 - **Gateway** is the control plane. If a caller passes Gateway auth, they are treated as a trusted operator for that Gateway.
 - **Node** is an execution extension of the Gateway. Pairing a node grants operator-level remote capability on that node.
 - **Exec approvals** (allowlist/ask UI) are operator guardrails to reduce accidental command execution, not a multi-tenant authorization boundary.
+- Exec approvals bind exact command/cwd/env context and, when OpenClaw can identify one concrete local script/file operand, that file snapshot too. This is best-effort integrity hardening, not a complete semantic model of every interpreter/runtime loader path.
 - Differences in command-risk warning heuristics between exec surfaces (`gateway`, `node`, `sandbox`) do not, by themselves, constitute a security-boundary bypass.
 - For untrusted-user isolation, split by trust boundary: separate gateways and separate OS users/hosts per boundary.
 

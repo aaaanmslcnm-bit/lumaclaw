@@ -1,4 +1,4 @@
-import type { CronPayload } from "../cron/types.js";
+import type { SoulBondCronPayload } from "./cron-types.js";
 import type { SoulBondDailyRunResult } from "./run-daily.js";
 
 // Converts a SoulBond daily run result into plain text the scheduler can log,
@@ -21,7 +21,7 @@ export function formatSoulBondRunAsSystemEvent(result: SoulBondDailyRunResult): 
   return parts.join("\n");
 }
 
-export function createSoulBondResultSystemEventPayload(result: SoulBondDailyRunResult): CronPayload {
+export function createSoulBondResultSystemEventPayload(result: SoulBondDailyRunResult): SoulBondCronPayload {
   return {
     kind: "systemEvent",
     text: formatSoulBondRunAsSystemEvent(result),

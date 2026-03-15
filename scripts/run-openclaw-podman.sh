@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
-# Rootless SoulClaw in Podman (compatibility runtime script).
+# Rootless OpenClaw in Podman: run after one-time setup.
 #
-# Preferred public-facing wrapper:
-#   ./scripts/run-soulclaw-podman.sh launch
-#   ./scripts/run-soulclaw-podman.sh launch setup
-#
-# This inherited script is kept so existing setups do not break.
 # One-time setup (from repo root): ./setup-podman.sh
-# Legacy direct usage still works:
-#   ./scripts/run-openclaw-podman.sh launch
-#   ./scripts/run-openclaw-podman.sh launch setup
+# Then:
+#   ./scripts/run-openclaw-podman.sh launch           # Start gateway
+#   ./scripts/run-openclaw-podman.sh launch setup      # Onboarding wizard
 #
 # As the openclaw user (no repo needed):
 #   sudo -u openclaw /home/openclaw/run-openclaw-podman.sh
@@ -19,7 +14,7 @@
 
 set -euo pipefail
 
-OPENCLAW_USER="${SOULCLAW_PODMAN_USER:-${OPENCLAW_PODMAN_USER:-openclaw}}"
+OPENCLAW_USER="${OPENCLAW_PODMAN_USER:-openclaw}"
 
 resolve_user_home() {
   local user="$1"
@@ -72,14 +67,14 @@ fi
 if [[ -z "${EFFECTIVE_HOME:-}" ]]; then
   EFFECTIVE_HOME="${OPENCLAW_HOME:-/tmp}"
 fi
-CONFIG_DIR="${SOULCLAW_CONFIG_DIR:-${OPENCLAW_CONFIG_DIR:-$EFFECTIVE_HOME/.openclaw}}"
-ENV_FILE="${SOULCLAW_PODMAN_ENV:-${OPENCLAW_PODMAN_ENV:-$CONFIG_DIR/.env}}"
-WORKSPACE_DIR="${SOULCLAW_WORKSPACE_DIR:-${OPENCLAW_WORKSPACE_DIR:-$CONFIG_DIR/workspace}}"
-CONTAINER_NAME="${SOULCLAW_PODMAN_CONTAINER:-${OPENCLAW_PODMAN_CONTAINER:-openclaw}}"
-OPENCLAW_IMAGE="${SOULCLAW_PODMAN_IMAGE:-${OPENCLAW_PODMAN_IMAGE:-openclaw:local}}"
-PODMAN_PULL="${SOULCLAW_PODMAN_PULL:-${OPENCLAW_PODMAN_PULL:-never}}"
-HOST_GATEWAY_PORT="${SOULCLAW_PODMAN_GATEWAY_HOST_PORT:-${OPENCLAW_PODMAN_GATEWAY_HOST_PORT:-${OPENCLAW_GATEWAY_PORT:-18789}}}"
-HOST_BRIDGE_PORT="${SOULCLAW_PODMAN_BRIDGE_HOST_PORT:-${OPENCLAW_PODMAN_BRIDGE_HOST_PORT:-${OPENCLAW_BRIDGE_PORT:-18790}}}"
+CONFIG_DIR="${OPENCLAW_CONFIG_DIR:-$EFFECTIVE_HOME/.openclaw}"
+ENV_FILE="${OPENCLAW_PODMAN_ENV:-$CONFIG_DIR/.env}"
+WORKSPACE_DIR="${OPENCLAW_WORKSPACE_DIR:-$CONFIG_DIR/workspace}"
+CONTAINER_NAME="${OPENCLAW_PODMAN_CONTAINER:-openclaw}"
+OPENCLAW_IMAGE="${OPENCLAW_PODMAN_IMAGE:-openclaw:local}"
+PODMAN_PULL="${OPENCLAW_PODMAN_PULL:-never}"
+HOST_GATEWAY_PORT="${OPENCLAW_PODMAN_GATEWAY_HOST_PORT:-${OPENCLAW_GATEWAY_PORT:-18789}}"
+HOST_BRIDGE_PORT="${OPENCLAW_PODMAN_BRIDGE_HOST_PORT:-${OPENCLAW_BRIDGE_PORT:-18790}}"
 
 # Safe cwd for podman (openclaw is nologin; avoid inherited cwd from sudo)
 cd "$EFFECTIVE_HOME" 2>/dev/null || cd /tmp 2>/dev/null || true
@@ -104,8 +99,8 @@ fi
 
 # Keep Podman default local-only unless explicitly overridden.
 # Non-loopback binds require gateway.controlUi.allowedOrigins (security hardening).
-# NOTE: must be evaluated after sourcing ENV_FILE so SOULCLAW_GATEWAY_BIND / OPENCLAW_GATEWAY_BIND set in .env takes effect.
-GATEWAY_BIND="${SOULCLAW_GATEWAY_BIND:-${OPENCLAW_GATEWAY_BIND:-loopback}}"
+# NOTE: must be evaluated after sourcing ENV_FILE so OPENCLAW_GATEWAY_BIND set in .env takes effect.
+GATEWAY_BIND="${OPENCLAW_GATEWAY_BIND:-loopback}"
 
 upsert_env_var() {
   local file="$1"
@@ -163,7 +158,7 @@ if [[ ! -f "$CONFIG_JSON" ]]; then
   echo "Created $CONFIG_JSON (minimal gateway.mode=local)." >&2
 fi
 
-PODMAN_USERNS="${SOULCLAW_PODMAN_USERNS:-${OPENCLAW_PODMAN_USERNS:-keep-id}}"
+PODMAN_USERNS="${OPENCLAW_PODMAN_USERNS:-keep-id}"
 USERNS_ARGS=()
 RUN_USER_ARGS=()
 case "$PODMAN_USERNS" in
@@ -188,14 +183,30 @@ fi
 ENV_FILE_ARGS=()
 [[ -f "$ENV_FILE" ]] && ENV_FILE_ARGS+=(--env-file "$ENV_FILE")
 
+# On Linux with SELinux enforcing/permissive, add ,Z so Podman relabels the
+# bind-mounted directories and the container can access them.
+SELINUX_MOUNT_OPTS=""
+if [[ -z "${OPENCLAW_BIND_MOUNT_OPTIONS:-}" ]]; then
+  if [[ "$(uname -s 2>/dev/null)" == "Linux" ]] && command -v getenforce >/dev/null 2>&1; then
+    _selinux_mode="$(getenforce 2>/dev/null || true)"
+    if [[ "$_selinux_mode" == "Enforcing" || "$_selinux_mode" == "Permissive" ]]; then
+      SELINUX_MOUNT_OPTS=",Z"
+    fi
+  fi
+else
+  # Honour explicit override (e.g. OPENCLAW_BIND_MOUNT_OPTIONS=":Z" → strip leading colon for inline use).
+  SELINUX_MOUNT_OPTS="${OPENCLAW_BIND_MOUNT_OPTIONS#:}"
+  [[ -n "$SELINUX_MOUNT_OPTS" ]] && SELINUX_MOUNT_OPTS=",$SELINUX_MOUNT_OPTS"
+fi
+
 if [[ "$RUN_SETUP" == true ]]; then
   exec podman run --pull="$PODMAN_PULL" --rm -it \
     --init \
     "${USERNS_ARGS[@]}" "${RUN_USER_ARGS[@]}" \
     -e HOME=/home/node -e TERM=xterm-256color -e BROWSER=echo \
     -e OPENCLAW_GATEWAY_TOKEN="$OPENCLAW_GATEWAY_TOKEN" \
-    -v "$CONFIG_DIR:/home/node/.openclaw:rw" \
-    -v "$WORKSPACE_DIR:/home/node/.openclaw/workspace:rw" \
+    -v "$CONFIG_DIR:/home/node/.openclaw:rw${SELINUX_MOUNT_OPTS}" \
+    -v "$WORKSPACE_DIR:/home/node/.openclaw/workspace:rw${SELINUX_MOUNT_OPTS}" \
     "${ENV_FILE_ARGS[@]}" \
     "$OPENCLAW_IMAGE" \
     node dist/index.js onboard "$@"
@@ -208,8 +219,8 @@ podman run --pull="$PODMAN_PULL" -d --replace \
   -e HOME=/home/node -e TERM=xterm-256color \
   -e OPENCLAW_GATEWAY_TOKEN="$OPENCLAW_GATEWAY_TOKEN" \
   "${ENV_FILE_ARGS[@]}" \
-  -v "$CONFIG_DIR:/home/node/.openclaw:rw" \
-  -v "$WORKSPACE_DIR:/home/node/.openclaw/workspace:rw" \
+  -v "$CONFIG_DIR:/home/node/.openclaw:rw${SELINUX_MOUNT_OPTS}" \
+  -v "$WORKSPACE_DIR:/home/node/.openclaw/workspace:rw${SELINUX_MOUNT_OPTS}" \
   -p "${HOST_GATEWAY_PORT}:18789" \
   -p "${HOST_BRIDGE_PORT}:18790" \
   "$OPENCLAW_IMAGE" \

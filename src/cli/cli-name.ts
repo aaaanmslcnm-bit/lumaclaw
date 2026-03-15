@@ -1,21 +1,16 @@
 import path from "node:path";
 
-export const DEFAULT_CLI_NAME = "soulclaw";
+export const DEFAULT_CLI_NAME = "openclaw";
 
-const KNOWN_CLI_NAMES = new Set([DEFAULT_CLI_NAME, "openclaw"]);
-const CLI_PREFIX_RE = /^(?:((?:pnpm|npm|bunx|npx)\s+))?(?:openclaw|soulclaw)\b/;
-const CLI_WRAPPER_EXT_RE = /\.(?:cmd|ps1|exe|mjs|cjs|js)$/i;
-
-function normalizeCliBasename(value: string): string {
-  return value.trim().toLowerCase().replace(CLI_WRAPPER_EXT_RE, "");
-}
+const KNOWN_CLI_NAMES = new Set([DEFAULT_CLI_NAME]);
+const CLI_PREFIX_RE = /^(?:((?:pnpm|npm|bunx|npx)\s+))?(openclaw)\b/;
 
 export function resolveCliName(argv: string[] = process.argv): string {
   const argv1 = argv[1];
   if (!argv1) {
     return DEFAULT_CLI_NAME;
   }
-  const base = normalizeCliBasename(path.basename(argv1));
+  const base = path.basename(argv1).trim();
   if (KNOWN_CLI_NAMES.has(base)) {
     return base;
   }

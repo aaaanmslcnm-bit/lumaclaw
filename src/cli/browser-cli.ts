@@ -19,7 +19,7 @@ import { formatHelpExamples } from "./help-format.js";
 export function registerBrowserCli(program: Command) {
   const browser = program
     .command("browser")
-    .description("Manage SoulClaw's dedicated browser (Chrome/Chromium)")
+    .description("Manage OpenClaw's dedicated browser (Chrome/Chromium)")
     .option("--browser-profile <name>", "Browser profile name (default from config)")
     .option("--json", "Output machine-readable JSON", false)
     .addHelpText(
@@ -36,7 +36,7 @@ export function registerBrowserCli(program: Command) {
     .action(() => {
       browser.outputHelp();
       defaultRuntime.error(
-        danger(`Missing subcommand. Try: "${formatCliCommand("soulclaw browser status")}"`),
+        danger(`Missing subcommand. Try: "${formatCliCommand("openclaw browser status")}"`),
       );
       defaultRuntime.exit(1);
     });

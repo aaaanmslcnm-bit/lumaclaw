@@ -1,8 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import { NonEmptyString } from "./primitives.js";
 
-export const SoulBondSnapshotSchema = Type.Any();
-
 export const PresenceEntrySchema = Type.Object(
   {
     host: Type.Optional(NonEmptyString),
@@ -54,7 +52,6 @@ export const SnapshotSchema = Type.Object(
     configPath: Type.Optional(NonEmptyString),
     stateDir: Type.Optional(NonEmptyString),
     sessionDefaults: Type.Optional(SessionDefaultsSchema),
-    soulbond: Type.Optional(SoulBondSnapshotSchema),
     authMode: Type.Optional(
       Type.Union([
         Type.Literal("none"),

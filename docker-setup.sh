@@ -4,12 +4,13 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
 EXTRA_COMPOSE_FILE="$ROOT_DIR/docker-compose.extra.yml"
-IMAGE_NAME="${SOULCLAW_IMAGE:-${OPENCLAW_IMAGE:-soulclaw:local}}"
-EXTRA_MOUNTS="${SOULCLAW_EXTRA_MOUNTS:-${OPENCLAW_EXTRA_MOUNTS:-}}"
-HOME_VOLUME_NAME="${SOULCLAW_HOME_VOLUME:-${OPENCLAW_HOME_VOLUME:-}}"
-RAW_SANDBOX_SETTING="${SOULCLAW_SANDBOX:-${OPENCLAW_SANDBOX:-}}"
+IMAGE_NAME="${OPENCLAW_IMAGE:-openclaw:local}"
+EXTRA_MOUNTS="${OPENCLAW_EXTRA_MOUNTS:-}"
+HOME_VOLUME_NAME="${OPENCLAW_HOME_VOLUME:-}"
+RAW_SANDBOX_SETTING="${OPENCLAW_SANDBOX:-}"
 SANDBOX_ENABLED=""
-DOCKER_SOCKET_PATH="${SOULCLAW_DOCKER_SOCKET:-${OPENCLAW_DOCKER_SOCKET:-}}"
+DOCKER_SOCKET_PATH="${OPENCLAW_DOCKER_SOCKET:-}"
+TIMEZONE="${OPENCLAW_TZ:-}"
 
 fail() {
   echo "ERROR: $*" >&2
@@ -107,7 +108,7 @@ ensure_control_ui_allowed_origins() {
   local current_allowed_origins
   allowed_origin_json="$(printf '["http://127.0.0.1:%s"]' "$OPENCLAW_GATEWAY_PORT")"
   current_allowed_origins="$(
-    docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli \
+    docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli \
       config get gateway.controlUi.allowedOrigins 2>/dev/null || true
   )"
   current_allowed_origins="${current_allowed_origins//$'\r'/}"
@@ -117,15 +118,15 @@ ensure_control_ui_allowed_origins() {
     return 0
   fi
 
-  docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli \
+  docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli \
     config set gateway.controlUi.allowedOrigins "$allowed_origin_json" --strict-json >/dev/null
   echo "Set gateway.controlUi.allowedOrigins to $allowed_origin_json for non-loopback bind."
 }
 
 sync_gateway_mode_and_bind() {
-  docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli \
+  docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli \
     config set gateway.mode local >/dev/null
-  docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli \
+  docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli \
     config set gateway.bind "$OPENCLAW_GATEWAY_BIND" >/dev/null
   echo "Pinned gateway.mode=local and gateway.bind=$OPENCLAW_GATEWAY_BIND for Docker setup."
 }
@@ -133,6 +134,11 @@ sync_gateway_mode_and_bind() {
 contains_disallowed_chars() {
   local value="$1"
   [[ "$value" == *$'\n'* || "$value" == *$'\r'* || "$value" == *$'\t'* ]]
+}
+
+is_valid_timezone() {
+  local value="$1"
+  [[ -e "/usr/share/zoneinfo/$value" && ! -d "/usr/share/zoneinfo/$value" ]]
 }
 
 validate_mount_path_value() {
@@ -202,6 +208,17 @@ fi
 if [[ -n "$SANDBOX_ENABLED" ]]; then
   validate_mount_path_value "OPENCLAW_DOCKER_SOCKET" "$DOCKER_SOCKET_PATH"
 fi
+if [[ -n "$TIMEZONE" ]]; then
+  if contains_disallowed_chars "$TIMEZONE"; then
+    fail "OPENCLAW_TZ contains unsupported control characters."
+  fi
+  if [[ ! "$TIMEZONE" =~ ^[A-Za-z0-9/_+\-]+$ ]]; then
+    fail "OPENCLAW_TZ must be a valid IANA timezone string (e.g. Asia/Shanghai)."
+  fi
+  if ! is_valid_timezone "$TIMEZONE"; then
+    fail "OPENCLAW_TZ must match a timezone in /usr/share/zoneinfo (e.g. Asia/Shanghai)."
+  fi
+fi
 
 mkdir -p "$OPENCLAW_CONFIG_DIR"
 mkdir -p "$OPENCLAW_WORKSPACE_DIR"
@@ -215,10 +232,8 @@ export OPENCLAW_CONFIG_DIR
 export OPENCLAW_WORKSPACE_DIR
 export OPENCLAW_GATEWAY_PORT="${OPENCLAW_GATEWAY_PORT:-18789}"
 export OPENCLAW_BRIDGE_PORT="${OPENCLAW_BRIDGE_PORT:-18790}"
-export OPENCLAW_GATEWAY_BIND="${SOULCLAW_GATEWAY_BIND:-${OPENCLAW_GATEWAY_BIND:-lan}}"
+export OPENCLAW_GATEWAY_BIND="${OPENCLAW_GATEWAY_BIND:-lan}"
 export OPENCLAW_IMAGE="$IMAGE_NAME"
-export SOULCLAW_IMAGE="$IMAGE_NAME"
-export SOULCLAW_IMAGE="$IMAGE_NAME"
 export OPENCLAW_DOCKER_APT_PACKAGES="${OPENCLAW_DOCKER_APT_PACKAGES:-}"
 export OPENCLAW_EXTENSIONS="${OPENCLAW_EXTENSIONS:-}"
 export OPENCLAW_EXTRA_MOUNTS="$EXTRA_MOUNTS"
@@ -226,6 +241,7 @@ export OPENCLAW_HOME_VOLUME="$HOME_VOLUME_NAME"
 export OPENCLAW_ALLOW_INSECURE_PRIVATE_WS="${OPENCLAW_ALLOW_INSECURE_PRIVATE_WS:-}"
 export OPENCLAW_SANDBOX="$SANDBOX_ENABLED"
 export OPENCLAW_DOCKER_SOCKET="$DOCKER_SOCKET_PATH"
+export OPENCLAW_TZ="$TIMEZONE"
 
 # Detect Docker socket GID for sandbox group_add.
 DOCKER_GID=""
@@ -270,7 +286,7 @@ write_extra_compose() {
 
   cat >"$EXTRA_COMPOSE_FILE" <<'YAML'
 services:
-  soulclaw-gateway:
+  openclaw-gateway:
     volumes:
 YAML
 
@@ -292,7 +308,7 @@ YAML
   done
 
   cat >>"$EXTRA_COMPOSE_FILE" <<'YAML'
-  soulclaw-cli:
+  openclaw-cli:
     volumes:
 YAML
 
@@ -410,9 +426,10 @@ upsert_env "$ENV_FILE" \
   OPENCLAW_DOCKER_SOCKET \
   DOCKER_GID \
   OPENCLAW_INSTALL_DOCKER_CLI \
-  OPENCLAW_ALLOW_INSECURE_PRIVATE_WS
+  OPENCLAW_ALLOW_INSECURE_PRIVATE_WS \
+  OPENCLAW_TZ
 
-if [[ "$IMAGE_NAME" == "soulclaw:local" ]]; then
+if [[ "$IMAGE_NAME" == "openclaw:local" ]]; then
   echo "==> Building Docker image: $IMAGE_NAME"
   docker build \
     --build-arg "OPENCLAW_DOCKER_APT_PACKAGES=${OPENCLAW_DOCKER_APT_PACKAGES}" \
@@ -436,12 +453,12 @@ fi
 # it works regardless of the host uid and doesn't require host-side root.
 echo ""
 echo "==> Fixing data-directory permissions"
-# Use -xdev to restrict chown to the config-dir mount only �?without it,
+# Use -xdev to restrict chown to the config-dir mount only — without it,
 # the recursive chown would cross into the workspace bind mount and rewrite
 # ownership of all user project files on Linux hosts.
 # After fixing the config dir, only the OpenClaw metadata subdirectory
 # (.openclaw/) inside the workspace gets chowned, not the user's project files.
-docker compose "${COMPOSE_ARGS[@]}" run --rm --user root --entrypoint sh soulclaw-cli -c \
+docker compose "${COMPOSE_ARGS[@]}" run --rm --user root --entrypoint sh openclaw-cli -c \
   'find /home/node/.openclaw -xdev -exec chown node:node {} +; \
    [ -d /home/node/.openclaw/workspace/.openclaw ] && chown -R node:node /home/node/.openclaw/workspace/.openclaw || true'
 
@@ -454,7 +471,7 @@ echo "Gateway token: $OPENCLAW_GATEWAY_TOKEN"
 echo "Tailscale exposure: Off (use host-level tailnet/Tailscale setup separately)."
 echo "Install Gateway daemon: No (managed by Docker Compose)"
 echo ""
-docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli onboard --mode local --no-install-daemon
+docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli onboard --mode local --no-install-daemon
 
 echo ""
 echo "==> Docker gateway defaults"
@@ -467,16 +484,16 @@ ensure_control_ui_allowed_origins
 echo ""
 echo "==> Provider setup (optional)"
 echo "WhatsApp (QR):"
-echo "  ${COMPOSE_HINT} run --rm soulclaw-cli channels login"
+echo "  ${COMPOSE_HINT} run --rm openclaw-cli channels login"
 echo "Telegram (bot token):"
-echo "  ${COMPOSE_HINT} run --rm soulclaw-cli channels add --channel telegram --token <token>"
+echo "  ${COMPOSE_HINT} run --rm openclaw-cli channels add --channel telegram --token <token>"
 echo "Discord (bot token):"
-echo "  ${COMPOSE_HINT} run --rm soulclaw-cli channels add --channel discord --token <token>"
+echo "  ${COMPOSE_HINT} run --rm openclaw-cli channels add --channel discord --token <token>"
 echo "Docs: https://docs.openclaw.ai/channels"
 
 echo ""
 echo "==> Starting gateway"
-docker compose "${COMPOSE_ARGS[@]}" up -d soulclaw-gateway
+docker compose "${COMPOSE_ARGS[@]}" up -d openclaw-gateway
 
 # --- Sandbox setup (opt-in via OPENCLAW_SANDBOX=1) ---
 if [[ -n "$SANDBOX_ENABLED" ]]; then
@@ -499,10 +516,10 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
   # Defense-in-depth: verify Docker CLI in the running image before enabling
   # sandbox. This avoids claiming sandbox is enabled when the image cannot
   # launch sandbox containers.
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --entrypoint docker soulclaw-gateway --version >/dev/null 2>&1; then
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --entrypoint docker openclaw-gateway --version >/dev/null 2>&1; then
     echo "WARNING: Docker CLI not found inside the container image." >&2
     echo "  Sandbox requires Docker CLI. Rebuild with --build-arg OPENCLAW_INSTALL_DOCKER_CLI=1" >&2
-    echo "  or use a local build (OPENCLAW_IMAGE=soulclaw:local). Skipping sandbox setup." >&2
+    echo "  or use a local build (OPENCLAW_IMAGE=openclaw:local). Skipping sandbox setup." >&2
     SANDBOX_ENABLED=""
   fi
 fi
@@ -516,7 +533,7 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
     SANDBOX_COMPOSE_FILE="$ROOT_DIR/docker-compose.sandbox.yml"
     cat >"$SANDBOX_COMPOSE_FILE" <<YAML
 services:
-  soulclaw-gateway:
+  openclaw-gateway:
     volumes:
       - ${DOCKER_SOCKET_PATH}:/var/run/docker.sock
 YAML
@@ -538,17 +555,17 @@ fi
 if [[ -n "$SANDBOX_ENABLED" ]]; then
   # Enable sandbox in OpenClaw config.
   sandbox_config_ok=true
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps soulclaw-cli \
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps openclaw-cli \
     config set agents.defaults.sandbox.mode "non-main" >/dev/null; then
     echo "WARNING: Failed to set agents.defaults.sandbox.mode" >&2
     sandbox_config_ok=false
   fi
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps soulclaw-cli \
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps openclaw-cli \
     config set agents.defaults.sandbox.scope "agent" >/dev/null; then
     echo "WARNING: Failed to set agents.defaults.sandbox.scope" >&2
     sandbox_config_ok=false
   fi
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps soulclaw-cli \
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --no-deps openclaw-cli \
     config set agents.defaults.sandbox.workspaceAccess "none" >/dev/null; then
     echo "WARNING: Failed to set agents.defaults.sandbox.workspaceAccess" >&2
     sandbox_config_ok=false
@@ -558,11 +575,11 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
     echo "Sandbox enabled: mode=non-main, scope=agent, workspaceAccess=none"
     echo "Docs: https://docs.openclaw.ai/gateway/sandboxing"
     # Restart gateway with sandbox compose overlay to pick up socket mount + config.
-    docker compose "${COMPOSE_ARGS[@]}" up -d soulclaw-gateway
+    docker compose "${COMPOSE_ARGS[@]}" up -d openclaw-gateway
   else
     echo "WARNING: Sandbox config was partially applied. Check errors above." >&2
     echo "  Skipping gateway restart to avoid exposing Docker socket without a full sandbox policy." >&2
-    if ! docker compose "${BASE_COMPOSE_ARGS[@]}" run --rm --no-deps soulclaw-cli \
+    if ! docker compose "${BASE_COMPOSE_ARGS[@]}" run --rm --no-deps openclaw-cli \
       config set agents.defaults.sandbox.mode "off" >/dev/null; then
       echo "WARNING: Failed to roll back agents.defaults.sandbox.mode to off" >&2
     else
@@ -572,13 +589,13 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
       rm -f "$SANDBOX_COMPOSE_FILE"
     fi
     # Ensure gateway service definition is reset without sandbox overlay mount.
-    docker compose "${BASE_COMPOSE_ARGS[@]}" up -d --force-recreate soulclaw-gateway
+    docker compose "${BASE_COMPOSE_ARGS[@]}" up -d --force-recreate openclaw-gateway
   fi
 else
   # Keep reruns deterministic: if sandbox is not active for this run, reset
   # persisted sandbox mode so future execs do not require docker.sock by stale
   # config alone.
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm soulclaw-cli \
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm openclaw-cli \
     config set agents.defaults.sandbox.mode "off" >/dev/null; then
     echo "WARNING: Failed to reset agents.defaults.sandbox.mode to off" >&2
   fi
@@ -595,5 +612,5 @@ echo "Workspace: $OPENCLAW_WORKSPACE_DIR"
 echo "Token: $OPENCLAW_GATEWAY_TOKEN"
 echo ""
 echo "Commands:"
-echo "  ${COMPOSE_HINT} logs -f soulclaw-gateway"
-echo "  ${COMPOSE_HINT} exec soulclaw-gateway node dist/index.js health --token \"$OPENCLAW_GATEWAY_TOKEN\""
+echo "  ${COMPOSE_HINT} logs -f openclaw-gateway"
+echo "  ${COMPOSE_HINT} exec openclaw-gateway node dist/index.js health --token \"$OPENCLAW_GATEWAY_TOKEN\""

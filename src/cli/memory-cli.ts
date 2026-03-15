@@ -581,15 +581,15 @@ export function registerMemoryCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["soulclaw memory status", "Show index and provider status."],
-          ["soulclaw memory status --deep", "Probe embedding provider readiness."],
-          ["soulclaw memory index --force", "Force a full reindex."],
-          ['soulclaw memory search "meeting notes"', "Quick search using positional query."],
+          ["openclaw memory status", "Show index and provider status."],
+          ["openclaw memory status --deep", "Probe embedding provider readiness."],
+          ["openclaw memory index --force", "Force a full reindex."],
+          ['openclaw memory search "meeting notes"', "Quick search using positional query."],
           [
-            'soulclaw memory search --query "deployment" --max-results 20',
+            'openclaw memory search --query "deployment" --max-results 20',
             "Limit results for focused troubleshooting.",
           ],
-          ["soulclaw memory status --json", "Output machine-readable JSON (good for scripts)."],
+          ["openclaw memory status --json", "Output machine-readable JSON (good for scripts)."],
         ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/memory", "docs.openclaw.ai/cli/memory")}\n`,
     );
 
