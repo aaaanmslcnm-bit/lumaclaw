@@ -98,7 +98,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
         with:
           install-bun: "false"
-          use-sticky-disk: "true"
+          use-sticky-disk: "false"
 
       - name: Build dist
         run: pnpm build
@@ -125,7 +125,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
         with:
           install-bun: "false"
-          use-sticky-disk: "true"
+          use-sticky-disk: "false"
 
       - name: Download dist artifact
         uses: actions/download-artifact@v4
@@ -172,7 +172,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
         with:
           install-bun: "${{ matrix.runtime == 'bun' }}"
-          use-sticky-disk: "true"
+          use-sticky-disk: "false"
 
       - name: Configure Node test resources
         if: (github.event_name != 'push' || matrix.runtime != 'bun') && matrix.task == 'test' && matrix.runtime == 'node'
@@ -202,7 +202,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
         with:
           install-bun: "false"
-          use-sticky-disk: "true"
+          use-sticky-disk: "false"
 
       - name: Check types and lint and oxfmt
         run: pnpm check
@@ -228,7 +228,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
         with:
           install-bun: "false"
-          use-sticky-disk: "true"
+          use-sticky-disk: "false"
 
       - name: Check docs
         run: pnpm check:docs
@@ -533,7 +533,7 @@ jobs:
             if swift build --package-path apps/macos --configuration release; then
               exit 0
             fi
-            echo "swift build failed (attempt $attempt/3). Retrying鈥?
+            echo "swift build failed (attempt $attempt/3). Retrying閳?
             sleep $((attempt * 20))
           done
           exit 1
@@ -545,7 +545,7 @@ jobs:
             if swift test --package-path apps/macos --parallel --enable-code-coverage --show-codecov-path; then
               exit 0
             fi
-            echo "swift test failed (attempt $attempt/3). Retrying鈥?
+            echo "swift test failed (attempt $attempt/3). Retrying閳?
             sleep $((attempt * 20))
           done
           exit 1
