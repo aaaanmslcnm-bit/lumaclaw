@@ -1,14 +1,10 @@
-import { readFileSync } from "node:fs";
-import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
+import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { getHealthSnapshot, type HealthSummary } from "../../commands/health.js";
-import { CONFIG_PATH, STATE_DIR, loadConfig } from "../../config/config.js";
+import { STATE_DIR, createConfigIO, loadConfig } from "../../config/config.js";
 import { resolveMainSessionKey } from "../../config/sessions.js";
 import { listSystemPresence } from "../../infra/system-presence.js";
 import { getUpdateAvailable } from "../../infra/update-startup.js";
 import { normalizeMainKey } from "../../routing/session-key.js";
-import { loadAndNormalizeSoulBondState } from "../../soulbond/state-schema.js";
-import { resolveDefaultSoulBondStatePath } from "../../soulbond/store.js";
-import type { SoulBondState } from "../../soulbond/types.js";
 import { resolveGatewayAuth } from "../auth.js";
 import type { Snapshot } from "../protocol/index.js";
 
@@ -18,25 +14,10 @@ let healthCache: HealthSummary | null = null;
 let healthRefresh: Promise<HealthSummary> | null = null;
 let broadcastHealthUpdate: ((snap: HealthSummary) => void) | null = null;
 
-function loadSoulBondSnapshot(workspaceDir: string | undefined): SoulBondState | undefined {
-  const statePath = resolveDefaultSoulBondStatePath(workspaceDir);
-  if (!statePath) {
-    return undefined;
-  }
-  try {
-    const raw = readFileSync(statePath, "utf8");
-    const parsed = JSON.parse(raw) as unknown;
-    return loadAndNormalizeSoulBondState(parsed).state;
-  } catch {
-    return undefined;
-  }
-}
-
 export function buildGatewaySnapshot(): Snapshot {
   const cfg = loadConfig();
+  const configPath = createConfigIO().configPath;
   const defaultAgentId = resolveDefaultAgentId(cfg);
-  const defaultWorkspaceDir = resolveAgentWorkspaceDir(cfg, defaultAgentId);
-  const soulbond = loadSoulBondSnapshot(defaultWorkspaceDir);
   const mainKey = normalizeMainKey(cfg.session?.mainKey);
   const mainSessionKey = resolveMainSessionKey(cfg);
   const scope = cfg.session?.scope ?? "per-sender";
@@ -52,7 +33,7 @@ export function buildGatewaySnapshot(): Snapshot {
     stateVersion: { presence: presenceVersion, health: healthVersion },
     uptimeMs,
     // Surface resolved paths so UIs can display the true config location.
-    configPath: CONFIG_PATH,
+    configPath,
     stateDir: STATE_DIR,
     sessionDefaults: {
       defaultAgentId,
@@ -60,7 +41,6 @@ export function buildGatewaySnapshot(): Snapshot {
       mainSessionKey,
       scope,
     },
-    soulbond,
     authMode: auth.mode,
     updateAvailable,
   };

@@ -1,4 +1,4 @@
-import type { CronSchedule } from "../cron/types.js";
+import type { SoulBondCronSchedule } from "./cron-types.js";
 import { createDefaultInteractionSummary, type InteractionSummary, type SoulBondState } from "./types.js";
 
 export const SOUL_BOND_DAILY_CRON_EXPR = "0 0 * * *";
@@ -25,7 +25,7 @@ function formatDateKeyInTimezone(date: Date, timeZone: string): string {
 
 // This creates the future cron schedule definition that SoulBond can plug into.
 // We keep it tiny and explicit: once per day, at midnight, in the chosen timezone.
-export function createSoulBondDailySchedule(timeZone = DEFAULT_SOUL_BOND_TIMEZONE): CronSchedule {
+export function createSoulBondDailySchedule(timeZone = DEFAULT_SOUL_BOND_TIMEZONE): SoulBondCronSchedule {
   return {
     kind: "cron",
     expr: SOUL_BOND_DAILY_CRON_EXPR,

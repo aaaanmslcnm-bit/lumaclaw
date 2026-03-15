@@ -1,4 +1,4 @@
-import type { CronJobCreate, CronPayload } from "../cron/types.js";
+import type { SoulBondCronJobCreate, SoulBondCronPayload } from "./cron-types.js";
 import { createSoulBondDailySchedule, DEFAULT_SOUL_BOND_TIMEZONE } from "./schedule.js";
 
 export const SOUL_BOND_DAILY_SYSTEM_EVENT_PREFIX = "soulbond:daily:";
@@ -25,7 +25,7 @@ export function parseSoulBondDailySystemEventText(text: string): string | undefi
   return statePath || undefined;
 }
 
-export function createSoulBondDailySystemEventPayload(statePath: string): CronPayload {
+export function createSoulBondDailySystemEventPayload(statePath: string): SoulBondCronPayload {
   return {
     kind: "systemEvent",
     text: createSoulBondDailySystemEventText(statePath),
@@ -35,7 +35,7 @@ export function createSoulBondDailySystemEventPayload(statePath: string): CronPa
 // Builds a minimal cron job definition for SoulBond daily evaluation.
 // We keep it on the existing main/systemEvent path so the future runtime hookup
 // only needs to interpret this event text and call the SoulBond runner.
-export function createSoulBondDailyCronJob(options: CreateSoulBondCronJobOptions): CronJobCreate {
+export function createSoulBondDailyCronJob(options: CreateSoulBondCronJobOptions): SoulBondCronJobCreate {
   const timeZone = options.timeZone ?? DEFAULT_SOUL_BOND_TIMEZONE;
   const name = options.name ?? "soulbond-daily";
   const enabled = options.enabled ?? true;

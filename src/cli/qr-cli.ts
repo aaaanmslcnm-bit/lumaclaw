@@ -11,7 +11,6 @@ import { formatDocsLink } from "../terminal/links.js";
 import { theme } from "../terminal/theme.js";
 import { resolveCommandSecretRefsViaGateway } from "./command-secret-gateway.js";
 import { getQrRemoteCommandSecretTargetIds } from "./command-secret-targets.js";
-import { formatCliCommand } from "./command-format.js";
 
 type QrCliOptions = {
   json?: boolean;
@@ -259,8 +258,8 @@ export function registerQrCli(program: Command) {
           `${theme.muted("Source:")} ${resolved.urlSource}`,
           "",
           "Approve after scan with:",
-          `  ${theme.command(formatCliCommand("openclaw devices list"))}`,
-          `  ${theme.command(formatCliCommand("openclaw devices approve <requestId>"))}`,
+          `  ${theme.command("openclaw devices list")}`,
+          `  ${theme.command("openclaw devices approve <requestId>")}`,
         );
 
         defaultRuntime.log(lines.join("\n"));

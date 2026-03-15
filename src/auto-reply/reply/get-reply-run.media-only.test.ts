@@ -1,8 +1,4 @@
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createDefaultSoulBondState } from "../../soulbond/types.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { runPreparedReply } from "./get-reply-run.js";
 
 vi.mock("../../agents/auth-profiles/session-override.js", () => ({
@@ -88,14 +84,6 @@ import { routeReply } from "./route-reply.js";
 import { drainFormattedSystemEvents } from "./session-updates.js";
 import { resolveTypingMode } from "./typing-mode.js";
 
-const tempDirs: string[] = [];
-
-async function createTempWorkspaceDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "reply-soulbond-"));
-  tempDirs.push(dir);
-  return dir;
-}
-
 function baseParams(
   overrides: Partial<Parameters<typeof runPreparedReply>[0]> = {},
 ): Parameters<typeof runPreparedReply>[0] {
@@ -171,10 +159,6 @@ function baseParams(
 describe("runPreparedReply media-only handling", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(async () => {
-    await Promise.all(tempDirs.splice(0, tempDirs.length).map((dir) => fs.rm(dir, { recursive: true, force: true })));
   });
 
   it("allows media-only prompts and preserves thread context in queued followups", async () => {
@@ -352,41 +336,6 @@ describe("runPreparedReply media-only handling", () => {
     expect(call).toBeTruthy();
     expect(call?.commandBody).toContain("System: [t] Model switched.");
     expect(call?.followupRun.run.extraSystemPrompt ?? "").not.toContain("Runtime System Events");
-  });
-
-  it("adds a SoulBond tone hint to the reply boundary when runtime state is available", async () => {
-    const workspaceDir = await createTempWorkspaceDir();
-    const statePath = path.join(workspaceDir, ".artifacts", "soulbond", "state.json");
-    const state = createDefaultSoulBondState();
-    state.bond = 55;
-    state.stage = "trusted";
-    await fs.mkdir(path.dirname(statePath), { recursive: true });
-    await fs.writeFile(statePath, JSON.stringify(state, null, 2));
-
-    await runPreparedReply(
-      baseParams({
-        workspaceDir,
-      }),
-    );
-
-    const call = vi.mocked(runReplyAgent).mock.calls[0]?.[0];
-    expect(call).toBeTruthy();
-    expect(call?.followupRun.run.extraSystemPrompt).toContain("Runtime SoulBond tone hint: warm (trusted).");
-    expect(call?.followupRun.run.extraSystemPrompt).toContain("Can sound more familiar, caring, and naturally proactive.");
-  });
-
-  it("fails soft when no SoulBond runtime state is available", async () => {
-    const workspaceDir = await createTempWorkspaceDir();
-
-    await runPreparedReply(
-      baseParams({
-        workspaceDir,
-      }),
-    );
-
-    const call = vi.mocked(runReplyAgent).mock.calls[0]?.[0];
-    expect(call).toBeTruthy();
-    expect(call?.followupRun.run.extraSystemPrompt ?? "").not.toContain("Runtime SoulBond tone hint:");
   });
 
   it("preserves first-token think hint when system events are prepended", async () => {

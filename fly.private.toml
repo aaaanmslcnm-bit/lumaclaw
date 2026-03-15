@@ -1,5 +1,4 @@
-# LumaClaw Fly.io PRIVATE deployment configuration
-# Fork-stage note: runtime env vars remain `OPENCLAW_*` for compatibility, but the public deployment line is LumaClaw.
+# OpenClaw Fly.io PRIVATE deployment configuration
 # Use this template for hardened deployments with no public IP exposure.
 #
 # This config is suitable when:
@@ -10,7 +9,7 @@
 #
 # See https://fly.io/docs/reference/configuration/
 
-app = "my-lumaclaw" # change to your app name
+app = "my-openclaw" # change to your app name
 primary_region = "iad" # change to your closest region
 
 [build]
@@ -19,8 +18,7 @@ dockerfile = "Dockerfile"
 [env]
 NODE_ENV = "production"
 OPENCLAW_PREFER_PNPM = "1"
-OPENCLAW_STATE_DIR = "/data/.lumaclaw"
-OPENCLAW_WORKSPACE_DIR = "/data/lumaclaw-workspace"
+OPENCLAW_STATE_DIR = "/data"
 NODE_OPTIONS = "--max-old-space-size=1536"
 
 [processes]
@@ -37,5 +35,5 @@ size = "shared-cpu-2x"
 memory = "2048mb"
 
 [mounts]
-source = "lumaclaw_data"
+source = "openclaw_data"
 destination = "/data"

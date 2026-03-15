@@ -1,8 +1,7 @@
-# LumaClaw Fly.io deployment configuration
-# Fork-stage note: runtime env vars remain `OPENCLAW_*` for compatibility, but the public deployment line is LumaClaw.
+# OpenClaw Fly.io deployment configuration
 # See https://fly.io/docs/reference/configuration/
 
-app = "lumaclaw"
+app = "openclaw"
 primary_region = "iad" # change to your closest region
 
 [build]
@@ -12,8 +11,7 @@ dockerfile = "Dockerfile"
 NODE_ENV = "production"
 # Fly uses x86, but keep this for consistency
 OPENCLAW_PREFER_PNPM = "1"
-OPENCLAW_STATE_DIR = "/data/.lumaclaw"
-OPENCLAW_WORKSPACE_DIR = "/data/lumaclaw-workspace"
+OPENCLAW_STATE_DIR = "/data"
 NODE_OPTIONS = "--max-old-space-size=1536"
 
 [processes]
@@ -32,5 +30,5 @@ size = "shared-cpu-2x"
 memory = "2048mb"
 
 [mounts]
-source = "lumaclaw_data"
+source = "openclaw_data"
 destination = "/data"

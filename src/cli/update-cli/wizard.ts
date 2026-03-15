@@ -11,7 +11,6 @@ import { selectStyled } from "../../terminal/prompt-select-styled.js";
 import { stylePromptMessage } from "../../terminal/prompt-style.js";
 import { theme } from "../../terminal/theme.js";
 import { pathExists } from "../../utils.js";
-import { formatCliCommand } from "../command-format.js";
 import {
   isEmptyDir,
   isGitCheckout,
@@ -25,7 +24,7 @@ import { updateCommand } from "./update-command.js";
 export async function updateWizardCommand(opts: UpdateWizardOptions = {}): Promise<void> {
   if (!process.stdin.isTTY) {
     defaultRuntime.error(
-      `Update wizard requires a TTY. Use \`${formatCliCommand("openclaw update --channel <stable|beta|dev>")}\` instead.`,
+      "Update wizard requires a TTY. Use `openclaw update --channel <stable|beta|dev>` instead.",
     );
     defaultRuntime.exit(1);
     return;

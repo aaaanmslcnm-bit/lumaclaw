@@ -57,12 +57,13 @@ function resolveTaglineMode(options: BannerOptions): TaglineMode | undefined {
 }
 
 export function formatCliBannerLine(version: string, options: BannerOptions = {}): string {
-  const commit = options.commit ?? resolveCommitHash({ env: options.env });
+  const commit =
+    options.commit ?? resolveCommitHash({ env: options.env, moduleUrl: import.meta.url });
   const commitLabel = commit ?? "unknown";
   const tagline = pickTagline({ ...options, mode: resolveTaglineMode(options) });
   const rich = options.richTty ?? isRich();
-  const title = "✦ SoulClaw";
-  const prefix = "✦ ";
+  const title = "🦞 OpenClaw";
+  const prefix = "🦞 ";
   const columns = options.columns ?? process.stdout.columns ?? 120;
   const plainBaseLine = `${title} ${version} (${commitLabel})`;
   const plainFullLine = tagline ? `${plainBaseLine} — ${tagline}` : plainBaseLine;
@@ -98,11 +99,11 @@ export function formatCliBannerLine(version: string, options: BannerOptions = {}
 
 const LOBSTER_ASCII = [
   "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-  "██░▄▄▄▄░██░▄░▄░██░▄▄▄██░██▄░██░▄▄░██░▄░▄░██░▄▀▄░████",
-  "██░▄▄▄▄░██░█░█░██░▄▄▄██░█░█░██░▄▄▀██░█░█░██░█░█░████",
-  "██░▀▀▀▀░██░███░██░▀▀▀██░██░████▀▀░██░███░██░███░████",
+  "██░▄▄▄░██░▄▄░██░▄▄▄██░▀██░██░▄▄▀██░████░▄▄▀██░███░██",
+  "██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██",
+  "██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██",
   "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-  "                  ✦ SOULCLAW ✦                    ",
+  "                  🦞 OPENCLAW 🦞                    ",
   " ",
 ];
 
@@ -126,8 +127,13 @@ export function formatCliBannerArt(options: BannerOptions = {}): string {
   };
 
   const colored = LOBSTER_ASCII.map((line) => {
-    if (line.includes("SOULCLAW")) {
-      return theme.muted("                  ") + theme.accent("✦") + theme.info(" SOULCLAW ") + theme.accent("✦");
+    if (line.includes("OPENCLAW")) {
+      return (
+        theme.muted("              ") +
+        theme.accent("🦞") +
+        theme.info(" OPENCLAW ") +
+        theme.accent("🦞")
+      );
     }
     return splitGraphemes(line).map(colorChar).join("");
   });

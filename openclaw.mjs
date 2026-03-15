@@ -1,16 +1,10 @@
 #!/usr/bin/env node
 
 import module from "node:module";
-import path from "node:path";
 
 const MIN_NODE_MAJOR = 22;
 const MIN_NODE_MINOR = 12;
 const MIN_NODE_VERSION = `${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}`;
-const CLI_NAME = (() => {
-  const argv0 = process.argv[1] ?? "";
-  const base = path.basename(argv0).toLowerCase();
-  return base.includes("soulclaw") ? "soulclaw" : "openclaw";
-})();
 
 const parseNodeVersion = (rawVersion) => {
   const [majorRaw = "0", minorRaw = "0"] = rawVersion.split(".");
@@ -30,7 +24,7 @@ const ensureSupportedNodeVersion = () => {
   }
 
   process.stderr.write(
-    `${CLI_NAME}: Node.js v${MIN_NODE_VERSION}+ is required (current: v${process.versions.node}).\n` +
+    `openclaw: Node.js v${MIN_NODE_VERSION}+ is required (current: v${process.versions.node}).\n` +
       "If you use nvm, run:\n" +
       `  nvm install ${MIN_NODE_MAJOR}\n` +
       `  nvm use ${MIN_NODE_MAJOR}\n` +
@@ -91,5 +85,5 @@ if (await tryImport("./dist/entry.js")) {
 } else if (await tryImport("./dist/entry.mjs")) {
   // OK
 } else {
-  throw new Error(`${CLI_NAME}: missing dist/entry.(m)js (build output).`);
+  throw new Error("openclaw: missing dist/entry.(m)js (build output).");
 }
