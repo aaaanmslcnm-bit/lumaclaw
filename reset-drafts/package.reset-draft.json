@@ -1,0 +1,47 @@
+{
+  "name": "lumaclaw",
+  "version": "0.1.0-reset-draft.1",
+  "private": true,
+  "description": "Minimal reset-oriented draft package for the LumaClaw 2.0 clean mainline scaffold.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://github.com/openclaw/openclaw",
+  "bugs": {
+    "url": "https://github.com/openclaw/openclaw/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openclaw/openclaw.git"
+  },
+  "bin": {
+    "lumaclaw": "./lumaclaw.reset-draft.mjs"
+  },
+  "files": [
+    "lumaclaw.reset-draft.mjs",
+    "README.reset-draft.md",
+    "CURRENT_STATE.reset-draft.md",
+    "ROADMAP.reset-draft.md",
+    "VISION.reset-draft.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "soulbond:status": "node --import tsx ./scripts/soulbond-status.ts",
+    "soulbond:demo": "node --import tsx ./scripts/soulbond-demo.ts"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "optionalDependencies": {
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "lumaclaw",
+  "version": "0.1.0-reset-v1",
+  "private": true,
+  "description": "SoulBond-first clean reset mainline for LumaClaw.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://github.com/Yukino-Akane/lumaclaw#readme",
+  "bugs": {
+    "url": "https://github.com/Yukino-Akane/lumaclaw/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yukino-Akane/lumaclaw.git"
+  },
+  "bin": {
+    "lumaclaw": "./lumaclaw.mjs"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "npm run typecheck",
+    "test": "vitest run --config vitest.config.ts",
+    "soulbond:status": "node --import tsx scripts/soulbond-status.ts",
+    "soulbond:demo": "node --import tsx scripts/soulbond-demo.ts",
+    "soulbond:run-daily": "node --import tsx scripts/soulbond-run-daily.ts",
+    "soulbond:cron-spec": "node --import tsx scripts/soulbond-cron-spec.ts",
+    "soulbond:build-summary": "node --import tsx scripts/soulbond-build-summary.ts"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
