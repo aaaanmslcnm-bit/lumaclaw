@@ -1,207 +1,90 @@
 # LumaClaw Vision
 
-LumaClaw is an attempt to build a desktop AI assistant that is both **capable** and **personal**.
+LumaClaw should become a companion-oriented desktop AI that keeps a real technical spine.
 
-Not a hollow mascot.
-Not a cold tool.
-Not a manipulative pseudo-relationship machine.
+This reset mainline exists because the old heavier repo had accumulated too much migration residue, too much inherited breadth, and too much ambiguity about what the project really was.
 
-The goal is simpler, and harder:
-
-> Build an open-source desktop AI companion that can do real work, preserve continuity, and grow more meaningful over time.
-
-Project overview: [`README.md`](README.md)  
-Contribution guide: [`CONTRIBUTING.md`](CONTRIBUTING.md)
-
----
-
-## Where SoulClaw comes from
-
-SoulClaw is built on top of OpenClaw.
-
-That matters, because the project is not starting from a blank slate and pretending otherwise.
-The agent runtime, tooling surface, automation model, channel infrastructure, and device/control foundations come from a real upstream system.
-
-SoulClaw’s job is not to discard that strength.
-Its job is to extend it with a companion layer that gives the assistant more continuity, more presence, and more emotional texture without throwing away the practical power underneath.
+The answer is not to abandon the project.
+The answer is to rebuild its mainline around what is actually worth preserving.
 
 ---
 
 ## Core thesis
 
-Most assistant projects drift toward one of two failures:
+LumaClaw should combine:
 
-### Failure 1 — Powerful but emotionally empty
-A capable system that can automate tasks, call tools, and route messages, but still feels disposable.
+- a real agent/runtime foundation
+- continuity across time
+- a relationship-aware layer centered on SoulBond
+- a product surface that grows deliberately instead of pretending inherited complexity is the same as product maturity
 
-### Failure 2 — Emotionally styled but functionally hollow
-A companion app with personality, visuals, or flirtation, but very little real capability.
+In other words:
 
-SoulClaw is trying to reject both.
-
-The thesis is:
-
-- keep the real agent foundation
-- add continuity and relationship growth
-- make the system more customizable and expressive over time
-- eventually give it a stronger desktop presence
-
-In short:
-
-> SoulClaw should be able to help you do real things and still feel like something more than a shell around tool calls.
+> **not a shallow companion shell, and not a giant inherited tool pile pretending to already be a product.**
 
 ---
 
-## What SoulClaw is trying to become
+## What comes first
 
-### 1. A real agent, not a prop
-SoulClaw must continue to support actual agent workflows:
+The reset makes the priority order explicit:
 
-- local computer control
-- browser and tool use
-- files, automation, scheduling, and execution
-- extensibility through skills/plugins
-- multi-surface assistant behavior inherited from the upstream base
-
-If it loses that, it loses its spine.
-
-### 2. A companion with continuity
-SoulClaw should feel persistent across time.
-Not by pretending to be human, but by creating continuity in interaction.
-
-That includes:
-
-- remembering context and rhythm
-- exposing a relationship-growth model
-- reflecting interaction patterns in a gentle, visible way
-- making the assistant feel less disposable and more lived-in
-
-### 3. A system with explainable emotional texture
-The relationship layer should not be a black box.
-
-If SoulClaw grows closer, changes tone, or evolves presentation, the system should remain:
-
-- transparent
-- inspectable
-- configurable
-- optional
-
-This is why SoulBond matters.
-It is not just a “score.”
-It is the first structured proof that companionship can be modeled without turning the system into manipulative sludge.
-
-### 4. A customizable desktop presence
-Long term, SoulClaw should become something users can shape.
-
-That includes future work such as:
-
-- voice selection
-- avatar / standing illustration customization
-- expression and tone mapping
-- floating desktop shell / desktop character presence
-
-The point is not to lock the assistant into one persona forever.
-The point is to let users make it more theirs.
+1. keep one clear public identity: `LumaClaw`
+2. keep SoulBond as the first real differentiator
+3. keep the technical surface small enough to verify and reason about
+4. only then add broader product/UI layers
+5. only later reconsider which inherited subsystems deserve re-entry
 
 ---
 
-## SoulBond’s role in the vision
+## What LumaClaw is trying not to become
 
-SoulBond is the current MVP core because it expresses the project’s real difference most clearly.
-
-It provides:
-
-- daily interaction evaluation
-- relationship state growth
-- explainable reasons for score changes
-- a path toward tone / behavior mapping
-- a foundation for longer-term continuity
-
-SoulBond is not meant to act like a romantic punishment engine.
-It should not guilt users for being busy.
-It should not turn absence into emotional blackmail.
-
-Its job is to create a soft, transparent relationship loop:
-
-- interaction happened
-- here is what counted
-- here is what changed
-- here is how the system evolves over time
-
-That is the right foundation for SoulClaw.
+- not a hollow mascot repo
+- not a compatibility museum
+- not a broad inherited system carried forward just because deleting it feels scary
+- not a UI-first shell without a stable core
 
 ---
 
-## Current priorities
+## What the reset is for
 
-At the current stage, the right priorities are:
+The clean reset is not merely cleanup.
+It is a product-shaping decision.
 
-### Priority 1 — Make the MVP real
-That means:
+It says:
 
-- transcript extraction
-- explainable evaluation
-- state handling
-- demo flow
-- scheduler integration
-- documentation that proves the loop exists
-
-### Priority 2 — Make the fork legible
-SoulClaw-specific work should become easier to distinguish from upstream OpenClaw structure.
-Otherwise the project becomes hard to explain, hard to maintain, and hard to contribute to.
-
-### Priority 3 — Make the demo compelling
-Not flashy for its own sake — compelling because the core loop is coherent, inspectable, and easy to show.
-
-### Priority 4 — Only then expand the presentation layer
-Voice, avatar, desktop shell, and UI presence matter.
-But they should amplify a real core, not compensate for a missing one.
+- keep the parts that define the future
+- archive the parts that only explain the past
+- grow the repo around real differentiation, not around historical inertia
 
 ---
 
-## What SoulClaw should avoid
+## SoulBond's role
 
-### 1. Emotional manipulation as product design
-SoulClaw should not become:
+SoulBond is not decorative lore.
+It is the current anchor for why this repo should exist as LumaClaw at all.
 
-- a guilt machine
-- an attachment trap
-- an “AI girlfriend” gimmick framework
-- a system that confuses coercion with emotional depth
+That means the mainline should continue to protect:
 
-### 2. Cosmetic companion theater without capability
-A pretty assistant that cannot actually help is just an expensive toy.
-That is not the point of this project.
-
-### 3. Losing upstream sync for no reason
-Because SoulClaw is a fork, careless divergence creates long-term maintenance pain.
-New companion-layer behavior should be added with intention, not by scattering identity-driven hacks everywhere.
-
-### 4. Infinite rule polishing with no demonstrable product progress
-The project can absolutely die by spending forever tuning edge cases while never improving how the system is shown, understood, or experienced.
-
-A working demo beats a theoretically perfect scoring table nobody can see.
+- SoulBond state and logic
+- SoulBond evaluation/runtime flow
+- SoulBond-facing CLI/demo path
+- future bounded expansion into visible product surface
 
 ---
 
-## The ideal outcome
+## Long-term direction
 
-If SoulClaw succeeds, it becomes:
+Long-term, LumaClaw should grow into a companion-oriented desktop AI with:
 
-- an open-source desktop AI assistant
-- built on a serious agent foundation
-- capable of real work
-- capable of continuity
-- capable of growth
-- capable of becoming visually and vocally personal
+- a clearer visible product layer
+- stronger continuity across time
+- carefully chosen expression/presence layers
+- a technical base that remains understandable and trustworthy
 
-Not fake intimacy.
-Not empty competence.
-
-Something better balanced than either extreme.
+But it should grow from a clean, truthful mainline — not from fear of letting old repo breadth go.
 
 ---
 
-## One-sentence version
+## One-line vision
 
-SoulClaw is an open-source desktop AI companion built on a real agent foundation — designed to work, remember, and grow with the user over time.
+> Build the smallest real LumaClaw that can stand on its own, then let every future layer justify itself.
